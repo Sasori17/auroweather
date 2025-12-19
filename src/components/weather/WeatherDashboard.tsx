@@ -465,7 +465,7 @@ export function WeatherDashboard({ withHeroBackground = false }: WeatherDashboar
                   transition={{ delay: 0.7 }}
                   className="w-full mb-12"
                 >
-                  <TemperatureGraph forecast={forecast} />
+                  <TemperatureGraph forecast={forecast} currentWeather={weather} />
                 </motion.div>
               )}
             </div>
@@ -478,7 +478,7 @@ export function WeatherDashboard({ withHeroBackground = false }: WeatherDashboar
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="px-6 pb-6"
+              className="px-6 pb-6 mt-16"
             >
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Sun Chart */}

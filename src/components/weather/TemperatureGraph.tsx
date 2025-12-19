@@ -3,10 +3,11 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Cloud, CloudRain, Snowflake, Sun, CloudLightning } from 'lucide-react';
-import type { ForecastData } from '@/types/weather';
+import type { ForecastData, WeatherData } from '@/types/weather';
 
 interface TemperatureGraphProps {
   forecast: ForecastData;
+  currentWeather?: WeatherData;
 }
 
 function getWeatherIcon(main: string, icon: string, size: number = 20) {
@@ -31,12 +32,12 @@ function getWeatherIcon(main: string, icon: string, size: number = 20) {
   return <Cloud className={`${className} text-slate-200 drop-shadow-md`} />;
 }
 
-export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
+export function TemperatureGraph({ forecast, currentWeather }: TemperatureGraphProps) {
   const dailyData = useMemo(() => {
     // Utiliser le timezone de la ville pour afficher l'heure locale
     const timezoneOffsetSeconds = forecast.city.timezone;
 
-    return forecast.list.slice(0, 8).map((item) => {
+    const forecastData = forecast.list.slice(0, 8).map((item) => {
       // Calculer l'heure locale en utilisant le timezone de la ville
       const utcDate = new Date(item.dt * 1000);
       const localTime = new Date(utcDate.getTime() + timezoneOffsetSeconds * 1000);
@@ -49,9 +50,33 @@ export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
         icon: item.weather[0].icon,
         main: item.weather[0].main,
         timestamp: item.dt,
+        isLive: false,
       };
     });
-  }, [forecast]);
+
+    // Ajouter le point "Maintenant" au début si currentWeather est disponible
+    if (currentWeather) {
+      const now = new Date();
+      const localTime = new Date(now.getTime() + timezoneOffsetSeconds * 1000);
+      const hour = localTime.getUTCHours();
+      const minute = localTime.getUTCMinutes();
+      const formattedTime = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+
+      const livePoint = {
+        day: formattedTime,
+        temp: Math.round(currentWeather.main.temp),
+        icon: currentWeather.weather[0].icon,
+        main: currentWeather.weather[0].main,
+        timestamp: Math.floor(Date.now() / 1000),
+        isLive: true,
+      };
+
+      // Insérer le point live au début et limiter à 8 points au total
+      return [livePoint, ...forecastData.slice(0, 7)];
+    }
+
+    return forecastData;
+  }, [forecast, currentWeather]);
 
   // Padding horizontal en pourcentage pour ne pas coller aux bords
   const paddingX = 3;
@@ -92,6 +117,11 @@ export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
 
   // Calculer dynamiquement l'index actif en fonction de l'heure actuelle
   const activeIndex = useMemo(() => {
+    // Si le premier point est le point live, il est toujours actif
+    if (dailyData.length > 0 && dailyData[0].isLive) {
+      return 0;
+    }
+
     const nowUtc = Math.floor(Date.now() / 1000); // Timestamp actuel en secondes
 
     // Trouver le point le plus proche de l'heure actuelle
@@ -156,8 +186,8 @@ export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
               x2={graphData.points[activeIndex].xPercent}
               y1={graphData.points[activeIndex].y}
               y2="85"
-              stroke="rgba(255,255,255,0.25)"
-              strokeWidth="0.3"
+              stroke={dailyData[activeIndex]?.isLive ? "rgba(250,204,21,0.6)" : "rgba(255,255,255,0.25)"}
+              strokeWidth={dailyData[activeIndex]?.isLive ? "0.5" : "0.3"}
               strokeDasharray="2 4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -167,56 +197,66 @@ export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
         </svg>
 
         {/* Points, températures et icônes en HTML */}
-        {graphData.points.map((point, index) => (
-          <motion.div
-            key={index}
-            className="absolute transform -translate-x-1/2 -translate-y-1/2"
-            style={{ 
-              left: `${point.xPercent}%`, 
-              top: `${point.y}%`,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 + index * 0.1 }}
-          >
-            {/* Point */}
-            {index === activeIndex ? (
-              <div className="relative flex items-center justify-center">
-                <div className="absolute w-6 h-6 bg-amber-300/20 rounded-full" />
-                <div className="w-2.5 h-2.5 bg-amber-300 rounded-full relative" />
+        {graphData.points.map((point, index) => {
+          const isLivePoint = dailyData[index]?.isLive;
+
+          return (
+            <motion.div
+              key={index}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                left: `${point.xPercent}%`,
+                top: `${point.y}%`,
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 + index * 0.1 }}
+            >
+              {/* Point */}
+              {index === activeIndex ? (
+                <div className="relative flex items-center justify-center">
+                  {isLivePoint ? (
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full relative" />
+                  ) : (
+                    <>
+                      <div className="absolute w-6 h-6 bg-amber-300/20 rounded-full" />
+                      <div className="w-2.5 h-2.5 bg-amber-300 rounded-full relative" />
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="w-1.5 h-1.5 bg-white/60 rounded-full" />
+              )}
+
+              {/* Température et icône au-dessus */}
+              <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 flex items-center gap-0.5 whitespace-nowrap">
+                <span className={`text-sm font-semibold drop-shadow-md ${isLivePoint ? 'text-yellow-300' : 'text-white'}`}>
+                  {point.temp}°
+                </span>
+                {getWeatherIcon(point.main, point.icon, 20)}
               </div>
-            ) : (
-              <div className="w-1.5 h-1.5 bg-white/60 rounded-full" />
-            )}
-            
-            {/* Température et icône au-dessus */}
-            <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 flex items-center gap-0.5 whitespace-nowrap">
-              <span className="text-white text-sm font-semibold drop-shadow-md">
-                {point.temp}°
-              </span>
-              {getWeatherIcon(point.main, point.icon, 20)}
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Heures en dessous - avec le même padding que le graphe */}
-      <div 
+      <div
         className="flex justify-between"
-        style={{ 
-          paddingLeft: `${paddingX}%`, 
-          paddingRight: `${paddingX}%` 
+        style={{
+          paddingLeft: `${paddingX}%`,
+          paddingRight: `${paddingX}%`
         }}
       >
         {dailyData.map((data, index) => (
           <motion.div
-            key={data.day}
-            className="text-white/40 text-xs text-center"
+            key={data.day + index}
+            className={`text-xs text-center ${data.isLive ? 'text-yellow-300 font-semibold' : 'text-white/40'}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 + index * 0.1 }}
           >
-            {data.day}
+            {data.isLive ? 'Maintenant' : data.day}
           </motion.div>
         ))}
       </div>

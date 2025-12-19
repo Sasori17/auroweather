@@ -576,7 +576,7 @@ export function IntegratedWeatherPage() {
                   transition={{ delay: 0.7 }}
                   className="w-full mb-12"
                 >
-                  <TemperatureGraph forecast={forecast} />
+                  <TemperatureGraph forecast={forecast} currentWeather={weather} />
                 </motion.div>
               )}
 
@@ -585,7 +585,7 @@ export function IntegratedWeatherPage() {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
               >
                 {/* Sun Chart */}
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20">

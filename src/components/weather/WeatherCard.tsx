@@ -277,23 +277,6 @@ export function WeatherCard({ weather, forecast, airQuality }: WeatherCardProps)
               transition={{ type: "spring", stiffness: 300 }}
             >
               <motion.div
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-              >
-                <Gauge className="w-8 h-8 text-purple-500 dark:text-purple-400" />
-              </motion.div>
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">Pression</div>
-                <div className="text-xl font-bold text-gray-800 dark:text-white">{weather.main.pressure} hPa</div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="flex items-center gap-3 p-4 rounded-xl modern-card hover:scale-105 transition-transform duration-300"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <motion.div
                 animate={{ opacity: [1, 0.5, 1] }}
                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               >
