@@ -33,9 +33,14 @@ function getWeatherIcon(main: string, icon: string, size: number = 20) {
 
 export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
   const dailyData = useMemo(() => {
+    // Utiliser le timezone de la ville pour afficher l'heure locale
+    const timezoneOffsetSeconds = forecast.city.timezone;
+
     return forecast.list.slice(0, 8).map((item) => {
-      const date = new Date(item.dt * 1000);
-      const hour = date.getHours();
+      // Calculer l'heure locale en utilisant le timezone de la ville
+      const utcDate = new Date(item.dt * 1000);
+      const localTime = new Date(utcDate.getTime() + timezoneOffsetSeconds * 1000);
+      const hour = localTime.getUTCHours();
       const formattedTime = `${hour.toString().padStart(2, '0')}:00`;
 
       return {
@@ -43,6 +48,7 @@ export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
         temp: Math.round(item.main.temp),
         icon: item.weather[0].icon,
         main: item.weather[0].main,
+        timestamp: item.dt,
       };
     });
   }, [forecast]);
@@ -84,7 +90,24 @@ export function TemperatureGraph({ forecast }: TemperatureGraphProps) {
     return { path, areaPath, points, minTemp, maxTemp };
   }, [dailyData, paddingX]);
 
-  const activeIndex = 1;
+  // Calculer dynamiquement l'index actif en fonction de l'heure actuelle
+  const activeIndex = useMemo(() => {
+    const nowUtc = Math.floor(Date.now() / 1000); // Timestamp actuel en secondes
+
+    // Trouver le point le plus proche de l'heure actuelle
+    let closestIndex = 0;
+    let minDiff = Math.abs(dailyData[0].timestamp - nowUtc);
+
+    for (let i = 1; i < dailyData.length; i++) {
+      const diff = Math.abs(dailyData[i].timestamp - nowUtc);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = i;
+      }
+    }
+
+    return closestIndex;
+  }, [dailyData]);
 
   return (
     <div className="w-full px-2">

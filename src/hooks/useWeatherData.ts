@@ -178,6 +178,14 @@ export function useWeatherData() {
     );
   }, [fetchWeatherByCoords]);
 
+  const clearWeather = useCallback(() => {
+    setWeather(null);
+    setForecast(null);
+    setAirQuality(null);
+    setCity('');
+    setError(null);
+  }, []);
+
   return {
     weather,
     forecast,
@@ -189,5 +197,6 @@ export function useWeatherData() {
     fetchWeatherByCity,
     fetchWeatherByCoords,
     getCurrentLocation,
+    clearWeather,
   };
 }

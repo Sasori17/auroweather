@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useState, useCallback, useRef, useEffect } from 'react';
@@ -157,7 +158,7 @@ function LargeWeatherIcon({ main }: { main: string }) {
 
 export function IntegratedWeatherPage() {
   const color = useMotionValue(COLORS_TOP[0]);
-  const { weather, forecast, airQuality, loading, error, fetchWeatherByCoords, getCurrentLocation } = useWeatherData();
+  const { weather, forecast, airQuality, loading, error, fetchWeatherByCoords, getCurrentLocation, clearWeather } = useWeatherData();
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { suggestions, loading: suggestionsLoading, fetchSuggestions, clearSuggestions } = useCitySuggestions();
@@ -203,6 +204,14 @@ export function IntegratedWeatherPage() {
   const handleLocationClick = useCallback(() => {
     getCurrentLocation();
   }, [getCurrentLocation]);
+
+  const handleHomeClick = useCallback(() => {
+    // Retourner à la page de présentation (hero section)
+    setSearchQuery('');
+    setShowSuggestions(false);
+    clearSuggestions();
+    clearWeather();
+  }, [clearWeather, clearSuggestions]);
 
   const formatDate = () => {
     return new Date().toLocaleDateString('en-US', {
@@ -273,14 +282,17 @@ export function IntegratedWeatherPage() {
           className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6"
         >
           {/* Left side - Logo */}
-          <div className="flex items-center gap-3">
+          <button
+            onClick={handleHomeClick}
+            className="flex items-center gap-3 transition-all hover:opacity-80 hover:scale-105 cursor-pointer bg-transparent border-none p-0"
+          >
             <img
               src="/logo/auroraweather-logo.svg"
               alt="AuroWeather Logo"
               className="w-8 h-8 sm:w-10 sm:h-10"
             />
             <h1 className="text-lg sm:text-xl font-bold text-white">AuroWeather</h1>
-          </div>
+          </button>
 
           {/* Center - Date */}
           <div className="text-white/80 text-xs sm:text-sm hidden md:block">({formatDate()})</div>
