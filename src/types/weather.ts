@@ -96,3 +96,49 @@ export interface ForecastData {
 }
 
 export type WeatherTheme = 'clear' | 'clouds' | 'rain' | 'drizzle' | 'thunderstorm' | 'snow' | 'mist' | 'night';
+
+export interface CitySuggestion {
+  name: string;
+  local_names?: Record<string, string>;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+}
+
+export type AlertLevel = 'Vert' | 'Jaune' | 'Orange' | 'Rouge';
+
+export interface WeatherAlert {
+  department: string;
+  departmentCode: string;
+  level: AlertLevel;
+  alertTypes: string[];
+  startTime: string;
+  endTime: string;
+  description?: string;
+  consequences?: string;
+  advice?: string;
+}
+
+export interface AirQualityData {
+  coord: {
+    lon: number;
+    lat: number;
+  };
+  list: Array<{
+    main: {
+      aqi: number; // Air Quality Index: 1 = Good, 2 = Fair, 3 = Moderate, 4 = Poor, 5 = Very Poor
+    };
+    components: {
+      co: number;      // Carbon monoxide (μg/m³)
+      no: number;      // Nitrogen monoxide (μg/m³)
+      no2: number;     // Nitrogen dioxide (μg/m³)
+      o3: number;      // Ozone (μg/m³)
+      so2: number;     // Sulphur dioxide (μg/m³)
+      pm2_5: number;   // Fine particles matter (μg/m³)
+      pm10: number;    // Coarse particulate matter (μg/m³)
+      nh3: number;     // Ammonia (μg/m³)
+    };
+    dt: number;
+  }>;
+}

@@ -1,185 +1,215 @@
-# AuroWeather ☀️🌧️⛈️
+# AuroWeather
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+A modern, feature-rich weather application built with Next.js 16 and React 19, providing real-time weather data, forecasts, and beautiful visualizations.
 
-Une application météo moderne et élégante construite avec Next.js 16, Tailwind CSS et shadcn/ui, affichant la météo en temps réel et les prévisions à 5 jours.
+![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black)
+![React](https://img.shields.io/badge/React-19-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8)
 
-![AuroWeather Preview](https://via.placeholder.com/800x400/0ea5e9/ffffff?text=AuroWeather+Preview)
+## Features
 
-## Fonctionnalités
+- **Real-time Weather Data**: Current conditions and detailed metrics
+- **5-Day Forecast**: Hour-by-hour forecasts with visual charts
+- **Weather Alerts**: Severe weather notifications and warnings
+- **City Search**: Smart city suggestions with autocomplete
+- **Location Detection**: Automatic geolocation on first visit
+- **Dynamic Themes**: Background changes based on weather and time of day
+- **3D Globe Visualization**: Interactive globe showing current location
+- **Sun Charts**: Sunrise/sunset times with visual arc
+- **Temperature Trends**: Interactive charts for temperature analysis
+- **Responsive Design**: Optimized for desktop and mobile
+- **Dark Mode**: Built-in theme toggle
+- **Weather Highlights**: UV index, wind speed, pressure, humidity, visibility
 
-- **Météo en temps réel** : Affichage de la température, de l'humidité, de la vitesse du vent, de la pression, et plus encore
-- **Prévisions à 5 jours** : Visualisation des prévisions météorologiques des prochains jours
-- **Recherche de ville** : Recherchez la météo de n'importe quelle ville dans le monde
-- **Géolocalisation automatique** : Détection automatique de votre position au chargement
-- **Thèmes dynamiques** : Le fond d'écran change selon les conditions météorologiques (pluie, neige, nuit, etc.)
-- **Loader animé** : Animation de chargement élégante pendant la récupération des données
-- **Interface responsive** : Design adapté aux mobiles, tablettes et ordinateurs
-- **Mode sombre** : Support du mode sombre automatique
+## Tech Stack
 
-## Stack Technique
+- **Framework**: Next.js 16.0.10 LTS with Turbopack
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS v4, shadcn/ui components
+- **Language**: TypeScript 5
+- **API**: OpenWeatherMap API
+- **Animations**: tw-animate-css
+- **Charts**: Recharts
+- **Testing**: Jest + React Testing Library
 
-- **Framework** : Next.js 16 avec App Router et Turbopack
-- **Runtime** : React 19
-- **UI** : Tailwind CSS v4 + shadcn/ui
-- **Icônes** : Lucide React
-- **API** : OpenWeatherMap API
-- **Language** : TypeScript
-- **Déploiement** : Vercel (recommandé)
+## Getting Started
 
-## Installation
+### Prerequisites
 
-### Prérequis
+- Node.js 18.x or higher
+- npm or yarn
+- OpenWeatherMap API key (free tier available)
 
-- Node.js 20+ installé
-- npm ou yarn
-- Une clé API OpenWeatherMap (gratuite)
+### Installation
 
-### Étapes d'installation
-
-1. **Cloner le repository**
-   ```bash
-   git clone <votre-repo-url>
-   cd auroweather.com
-   ```
-
-2. **Installer les dépendances**
-   ```bash
-   npm install
-   ```
-
-3. **Obtenir une clé API OpenWeatherMap**
-   - Visitez [OpenWeatherMap](https://openweathermap.org/api)
-   - Créez un compte gratuit
-   - Générez une clé API
-
-4. **Configurer les variables d'environnement**
-   - Ouvrez le fichier `.env.local` à la racine du projet
-   - Remplacez `your_api_key_here` par votre clé API :
-     ```
-     NEXT_PUBLIC_OPENWEATHER_API_KEY=votre_clé_api_ici
-     ```
-
-5. **Lancer le serveur de développement**
-   ```bash
-   npm run dev
-   ```
-
-6. **Ouvrir l'application**
-   - Ouvrez votre navigateur à l'adresse [http://localhost:3000](http://localhost:3000)
-
-## Structure du Projet
-
-```
-auroweather.com/
-├── src/
-│   ├── app/                  # App Router de Next.js
-│   │   ├── layout.tsx        # Layout principal avec nav et footer
-│   │   ├── page.tsx          # Page d'accueil
-│   │   └── globals.css       # Styles globaux
-│   ├── components/
-│   │   ├── ui/              # Composants shadcn/ui
-│   │   │   ├── card.tsx
-│   │   │   ├── button.tsx
-│   │   │   ├── input.tsx
-│   │   │   ├── badge.tsx
-│   │   │   ├── alert.tsx
-│   │   │   └── loader.tsx    # Loader personnalisé
-│   │   └── weather/         # Composants météo
-│   │       ├── WeatherCard.tsx
-│   │       └── ForecastCard.tsx
-│   ├── hooks/
-│   │   └── useWeatherData.ts # Hook personnalisé pour l'API
-│   ├── types/
-│   │   └── weather.ts        # Types TypeScript
-│   └── lib/
-│       └── utils.ts          # Utilitaires
-├── .env.local               # Variables d'environnement (à configurer)
-└── package.json
+1. Clone the repository:
+```bash
+git clone https://github.com/Sasori17/auroweather.git
+cd auroweather
 ```
 
-## Utilisation
+2. Install dependencies:
+```bash
+npm install
+```
 
-1. **Recherche manuelle** : Entrez le nom d'une ville dans la barre de recherche et appuyez sur Entrée
-2. **Géolocalisation** : Cliquez sur l'icône de localisation pour utiliser votre position actuelle
-3. **Thèmes dynamiques** : Le fond d'écran s'adapte automatiquement selon :
-   - Les conditions météorologiques (pluie, neige, nuages, etc.)
-   - L'heure de la journée (mode nuit entre 20h et 6h)
+3. Create environment file:
+```bash
+cp .env.example .env.local
+```
 
-## API OpenWeatherMap
+4. Add your OpenWeatherMap API key to `.env.local`:
+```env
+NEXT_PUBLIC_OPENWEATHER_API_KEY=your_api_key_here
+```
 
-L'application utilise deux endpoints de l'API OpenWeatherMap :
+Get your free API key at [OpenWeatherMap](https://openweathermap.org/api). Note: New API keys can take up to 2 hours to activate.
 
-- **Current Weather Data** : Pour la météo actuelle
-- **5 Day / 3 Hour Forecast** : Pour les prévisions à 5 jours
+5. Run the development server:
+```bash
+npm run dev
+```
 
-Les données sont récupérées en unités métriques (Celsius, km/h).
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Scripts Disponibles
+### Testing API Key
+
+Visit `/test-api` route to verify your API key is working correctly.
+
+## Development Commands
 
 ```bash
-# Démarrer le serveur de développement
+# Development server with Turbopack
 npm run dev
 
-# Créer un build de production
+# Production build with Turbopack
 npm run build
 
-# Démarrer le serveur de production
+# Start production server
 npm start
 
-# Lancer le linter
+# Run linter
 npm run lint
+
+# Run tests
+npm test
 ```
 
-## Déploiement
+## Project Structure
 
-### Déploiement sur Vercel (recommandé)
-
-1. Poussez votre code sur GitHub
-2. Connectez-vous à [Vercel](https://vercel.com)
-3. Importez votre repository
-4. Ajoutez la variable d'environnement `NEXT_PUBLIC_OPENWEATHER_API_KEY`
-5. Déployez !
-
-## Personnalisation
-
-### Modifier les thèmes météo
-
-Éditez les couleurs de gradient dans `src/app/page.tsx` :
-
-```typescript
-const themeColors: Record<WeatherTheme, string> = {
-  clear: 'from-blue-400 via-blue-300 to-blue-200',
-  // ... autres thèmes
-};
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Home page
+│   └── globals.css        # Global styles
+├── components/
+│   ├── ui/                # shadcn/ui components
+│   └── weather/           # Weather-specific components
+│       ├── WeatherDashboard.tsx
+│       ├── WeatherCard.tsx
+│       ├── ForecastCard.tsx
+│       ├── TodayHighlights.tsx
+│       ├── TemperatureGraph.tsx
+│       ├── SunChart.tsx
+│       └── WeatherAlertsModal.tsx
+├── hooks/                 # Custom React hooks
+│   ├── useWeatherData.ts
+│   ├── useWeatherAlerts.ts
+│   └── useCitySuggestions.ts
+├── types/                 # TypeScript type definitions
+│   └── weather.ts
+└── lib/                   # Utility functions
 ```
 
-### Ajouter des icônes météo personnalisées
+## Key Features Explained
 
-Les icônes proviennent d'OpenWeatherMap. Pour utiliser vos propres icônes, modifiez les composants dans `src/components/weather/`.
+### Dynamic Weather Themes
 
-## Technologies Clés
+The app automatically adjusts its background gradient based on:
+- Current weather conditions (clear, rain, snow, clouds, etc.)
+- Time of day (day/night modes from 6h-20h)
 
-- **Next.js 16** : Framework React avec App Router et Turbopack
-- **React 19** : Dernière version de React avec React Compiler
-- **Tailwind CSS v4** : Framework CSS utility-first
-- **shadcn/ui** : Collection de composants réutilisables
-- **TypeScript** : Typage statique pour JavaScript
-- **Lucide React** : Bibliothèque d'icônes moderne
-- **Google AdSense** : Monétisation avec publicités intégrées
+### Weather Data
 
-## Licence
+All weather data is fetched through the `useWeatherData` hook which provides:
+- Current weather by city name
+- Current weather by coordinates
+- Automatic geolocation
+- 5-day forecast with 3-hour intervals
+- Error handling for API issues
 
-Ce projet est open source et disponible sous la licence MIT.
+### Responsive Design
+
+The application is fully responsive with:
+- Mobile-first approach
+- Touch-friendly controls
+- Optimized layouts for all screen sizes
+
+## API Integration
+
+The app uses [OpenWeatherMap API](https://openweathermap.org/api) with the following endpoints:
+
+- **Current Weather**: `api.openweathermap.org/data/2.5/weather`
+- **5-Day Forecast**: `api.openweathermap.org/data/2.5/forecast`
+
+All measurements use the metric system (Celsius, km/h).
+
+## Deployment
+
+### Deploy to Vercel (Recommended)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Sasori17/auroweather)
+
+1. Push your code to GitHub
+2. Import your repository to [Vercel](https://vercel.com)
+3. Add environment variable: `NEXT_PUBLIC_OPENWEATHER_API_KEY`
+4. Deploy
+
+### Other Platforms
+
+The app can be deployed to any platform that supports Next.js:
+- Netlify
+- AWS Amplify
+- Railway
+- Render
+
+Just ensure you set the `NEXT_PUBLIC_OPENWEATHER_API_KEY` environment variable.
+
+## Environment Variables
+
+Required environment variables:
+
+- `NEXT_PUBLIC_OPENWEATHER_API_KEY`: Your OpenWeatherMap API key
+
+See `.env.example` for reference.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- Weather data provided by [OpenWeatherMap](https://openweathermap.org)
+- UI components from [shadcn/ui](https://ui.shadcn.com)
+- Icons from [Lucide React](https://lucide.dev)
+- Built with [Next.js](https://nextjs.org)
 
 ## Support
 
-Pour toute question ou problème, ouvrez une issue sur le repository GitHub.
+For issues and questions, please open an issue on [GitHub](https://github.com/Sasori17/auroweather/issues).
 
 ---
 
-Développé avec ❤️ par AuroWeather
+Made with ❤️ using Next.js and React

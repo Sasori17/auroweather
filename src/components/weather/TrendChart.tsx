@@ -60,7 +60,7 @@ export function TrendChart({ forecast, daysToShow }: TrendChartProps) {
     : '';
 
   return (
-    <div className="w-full p-6 glass-card rounded-xl">
+    <div className="w-full p-6 modern-card rounded-xl">
       <h3 className="text-lg font-bold text-gray-800 mb-4" style={{ fontFamily: 'var(--font-urbanist)' }}>
         Tendance des températures ({dailyData.length} jours)
       </h3>

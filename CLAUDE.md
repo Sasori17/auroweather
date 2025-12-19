@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AuroWeather is a modern weather application built with Next.js 16 and React 19, displaying real-time weather data and forecasts using the OpenWeatherMap API. The app is ad-supported with Google AdSense integration.
+AuroWeather is a modern weather application built with Next.js 16.0.10 LTS and React 19, displaying real-time weather data and forecasts using the OpenWeatherMap API. The app is ad-supported with Google AdSense integration.
 
 ## Development Commands
 

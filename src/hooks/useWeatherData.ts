@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { WeatherData, ForecastData } from '@/types/weather';
+import type { WeatherData, ForecastData, AirQualityData } from '@/types/weather';
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
@@ -9,9 +9,11 @@ const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 export function useWeatherData() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [forecast, setForecast] = useState<ForecastData | null>(null);
+  const [airQuality, setAirQuality] = useState<AirQualityData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [city, setCity] = useState<string>('');
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null);
 
   const fetchWeatherByCity = useCallback(async (cityName: string) => {
     if (!API_KEY) {
@@ -52,10 +54,21 @@ export function useWeatherData() {
         const forecastData: ForecastData = await forecastResponse.json();
         setForecast(forecastData);
       }
+
+      // Fetch air quality
+      const airQualityResponse = await fetch(
+        `${BASE_URL}/air_pollution?lat=${weatherData.coord.lat}&lon=${weatherData.coord.lon}&appid=${API_KEY}`
+      );
+
+      if (airQualityResponse.ok) {
+        const airQualityData: AirQualityData = await airQualityResponse.json();
+        setAirQuality(airQualityData);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
       setWeather(null);
       setForecast(null);
+      setAirQuality(null);
     } finally {
       setLoading(false);
     }
@@ -98,10 +111,21 @@ export function useWeatherData() {
         const forecastData: ForecastData = await forecastResponse.json();
         setForecast(forecastData);
       }
+
+      // Fetch air quality
+      const airQualityResponse = await fetch(
+        `${BASE_URL}/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+      );
+
+      if (airQualityResponse.ok) {
+        const airQualityData: AirQualityData = await airQualityResponse.json();
+        setAirQuality(airQualityData);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
       setWeather(null);
       setForecast(null);
+      setAirQuality(null);
     } finally {
       setLoading(false);
     }
@@ -116,7 +140,9 @@ export function useWeatherData() {
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lon: longitude });
+        fetchWeatherByCoords(latitude, longitude);
       },
       () => {
         setError('Unable to retrieve your location');
@@ -128,9 +154,11 @@ export function useWeatherData() {
   return {
     weather,
     forecast,
+    airQuality,
     loading,
     error,
     city,
+    userLocation,
     fetchWeatherByCity,
     fetchWeatherByCoords,
     getCurrentLocation,
