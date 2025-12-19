@@ -76,7 +76,7 @@ function LargeWeatherIcon({ main }: { main: string }) {
   if (condition.includes('clear')) {
     return (
       <motion.div
-        className="relative w-80 h-80"
+        className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80"
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ duration: 0.8, type: 'spring' }}
@@ -85,7 +85,7 @@ function LargeWeatherIcon({ main }: { main: string }) {
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
         >
-          <Sun className="w-80 h-80 text-amber-400 drop-shadow-[0_0_50px_rgba(251,191,36,0.5)]" />
+          <Sun className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 text-amber-400 drop-shadow-[0_0_50px_rgba(251,191,36,0.5)]" />
         </motion.div>
       </motion.div>
     );
@@ -94,12 +94,12 @@ function LargeWeatherIcon({ main }: { main: string }) {
   if (condition.includes('rain') || condition.includes('drizzle')) {
     return (
       <motion.div
-        className="relative w-80 h-80"
+        className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80"
         initial={{ scale: 0, y: -50 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ duration: 0.8, type: 'spring' }}
       >
-        <CloudRain className="w-80 h-80 text-blue-400 drop-shadow-[0_0_50px_rgba(96,165,250,0.5)]" />
+        <CloudRain className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 text-blue-400 drop-shadow-[0_0_50px_rgba(96,165,250,0.5)]" />
       </motion.div>
     );
   }
@@ -107,12 +107,12 @@ function LargeWeatherIcon({ main }: { main: string }) {
   if (condition.includes('thunder')) {
     return (
       <motion.div
-        className="relative w-80 h-80"
+        className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.8, type: 'spring' }}
       >
-        <CloudLightning className="w-80 h-80 text-amber-400 drop-shadow-[0_0_50px_rgba(251,191,36,0.5)]" />
+        <CloudLightning className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 text-amber-400 drop-shadow-[0_0_50px_rgba(251,191,36,0.5)]" />
         <motion.div
           className="absolute inset-0"
           initial={{ opacity: 0 }}
@@ -124,7 +124,7 @@ function LargeWeatherIcon({ main }: { main: string }) {
             repeatDelay: 2
           }}
         >
-          <CloudLightning className="w-80 h-80 text-yellow-300" />
+          <CloudLightning className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 text-yellow-300" />
         </motion.div>
       </motion.div>
     );
@@ -133,24 +133,24 @@ function LargeWeatherIcon({ main }: { main: string }) {
   if (condition.includes('snow')) {
     return (
       <motion.div
-        className="relative w-80 h-80"
+        className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80"
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ duration: 0.8, type: 'spring' }}
       >
-        <Snowflake className="w-80 h-80 text-blue-200 drop-shadow-[0_0_50px_rgba(186,230,253,0.5)]" />
+        <Snowflake className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 text-blue-200 drop-shadow-[0_0_50px_rgba(186,230,253,0.5)]" />
       </motion.div>
     );
   }
 
   return (
     <motion.div
-      className="relative w-80 h-80"
+      className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80"
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ duration: 0.8, type: 'spring' }}
     >
-      <Cloud className="w-80 h-80 text-slate-400 drop-shadow-[0_0_50px_rgba(148,163,184,0.5)]" />
+      <Cloud className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 text-slate-400 drop-shadow-[0_0_50px_rgba(148,163,184,0.5)]" />
     </motion.div>
   );
 }
@@ -270,23 +270,23 @@ export function IntegratedWeatherPage() {
         <motion.header
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="flex items-center justify-between p-6"
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 sm:p-6"
         >
           {/* Left side - Logo */}
           <div className="flex items-center gap-3">
             <img
               src="/logo/auroraweather-logo.svg"
               alt="AuroWeather Logo"
-              className="w-10 h-10"
+              className="w-8 h-8 sm:w-10 sm:h-10"
             />
-            <h1 className="text-xl font-bold text-white">AuroWeather</h1>
+            <h1 className="text-lg sm:text-xl font-bold text-white">AuroWeather</h1>
           </div>
 
           {/* Center - Date */}
-          <div className="text-white/80 text-sm">({formatDate()})</div>
+          <div className="text-white/80 text-xs sm:text-sm hidden md:block">({formatDate()})</div>
 
           {/* Right side - Search */}
-          <div ref={containerRef} className="relative">
+          <div ref={containerRef} className="relative w-full sm:w-auto">
             <div className="relative flex items-center">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70 z-10 pointer-events-none" />
               <motion.input
@@ -296,7 +296,7 @@ export function IntegratedWeatherPage() {
                 onChange={handleSearchChange}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder="Search city..."
-                className="w-56 pl-12 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-md text-white text-sm placeholder:text-white/50 focus:outline-none focus:w-72 transition-all focus:bg-white/15"
+                className="w-full sm:w-56 pl-12 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-md text-white text-sm placeholder:text-white/50 focus:outline-none sm:focus:w-72 transition-all focus:bg-white/15"
               />
             </div>
 
@@ -308,7 +308,7 @@ export function IntegratedWeatherPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   style={{ boxShadow }}
-                  className="absolute top-full right-0 mt-2 bg-gray-950/95 backdrop-blur-md rounded-xl overflow-hidden z-50 min-w-[300px] border border-white/10"
+                  className="absolute top-full left-0 sm:right-0 sm:left-auto mt-2 bg-gray-950/95 backdrop-blur-md rounded-xl overflow-hidden z-50 w-full sm:min-w-[300px] border border-white/10"
                 >
                   {suggestions.map((suggestion, index) => (
                     <button
@@ -340,12 +340,12 @@ export function IntegratedWeatherPage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="mb-8"
+                className="mb-6 sm:mb-8"
               >
                 <img
                   src="/logo/auroraweather-logo.svg"
                   alt="AuroWeather"
-                  className="w-32 h-32 drop-shadow-[0_0_50px_rgba(59,130,246,0.5)]"
+                  className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-[0_0_50px_rgba(59,130,246,0.5)]"
                 />
               </motion.div>
 
@@ -353,7 +353,7 @@ export function IntegratedWeatherPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-5xl font-bold bg-gradient-to-br from-white via-blue-100 to-purple-200 bg-clip-text text-transparent text-center mb-4"
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-white via-blue-100 to-purple-200 bg-clip-text text-transparent text-center mb-4 px-4"
               >
                 Bienvenue sur AuroWeather
               </motion.h2>
@@ -362,7 +362,7 @@ export function IntegratedWeatherPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-xl text-white/70 text-center max-w-2xl mb-12"
+                className="text-base sm:text-lg lg:text-xl text-white/70 text-center max-w-2xl mb-8 sm:mb-12 px-6"
               >
                 Découvrez les prévisions météo en temps réel avec une interface moderne et élégante.
                 Recherchez votre ville pour commencer.
@@ -372,7 +372,7 @@ export function IntegratedWeatherPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full px-6"
               >
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center">
                   <div className="flex justify-center mb-4">
@@ -448,15 +448,15 @@ export function IntegratedWeatherPage() {
               </div>
             </motion.div>
           ) : weather && (
-            <div key="weather-main" className="px-6 pb-6">
+            <div key="weather-main" className="px-4 sm:px-6 pb-6">
               {/* Main Content - Three columns */}
-              <div className="grid grid-cols-[1.5fr_2fr_1fr] gap-8 mb-12">
+              <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_2fr_1fr] gap-8 mb-12">
                 {/* Left Side - Temperature and Description */}
                 <motion.div
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.5 }}
-                  className="flex flex-col justify-center space-y-8 pl-12"
+                  className="flex flex-col justify-center space-y-4 sm:space-y-8 px-4 sm:pl-12"
                 >
                   {/* City and Country */}
                   <div className="flex items-center gap-2 text-white/80">
@@ -467,19 +467,19 @@ export function IntegratedWeatherPage() {
                   {/* Large Temperature */}
                   <div className="flex items-start gap-1">
                     <motion.span
-                      className="text-[140px] font-extralight text-white leading-none"
+                      className="text-6xl sm:text-8xl lg:text-[140px] font-extralight text-white leading-none"
                       initial={{ opacity: 0, y: 50 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3, type: 'spring' }}
                     >
                       {Math.round(weather.main.temp)}
                     </motion.span>
-                    <div className="text-4xl text-white/60 mt-6">°C</div>
+                    <div className="text-2xl sm:text-3xl lg:text-4xl text-white/60 mt-2 sm:mt-4 lg:mt-6">°C</div>
                   </div>
 
                   {/* Weather Description */}
                   <motion.h2
-                    className="text-3xl font-light text-white/80"
+                    className="text-xl sm:text-2xl lg:text-3xl font-light text-white/80"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
@@ -492,7 +492,7 @@ export function IntegratedWeatherPage() {
 
                   {/* Wind and Humidity */}
                   <motion.div
-                    className="flex items-center gap-8"
+                    className="flex items-center gap-4 sm:gap-8"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -501,14 +501,14 @@ export function IntegratedWeatherPage() {
                       <Wind className="w-5 h-5 text-white/60" />
                       <div className="text-left">
                         <div className="text-white/50 text-xs">Wind</div>
-                        <div className="text-white text-lg font-light">{Math.round(weather.wind.speed * 3.6)} km/h</div>
+                        <div className="text-white text-base sm:text-lg font-light">{Math.round(weather.wind.speed * 3.6)} km/h</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Droplets className="w-5 h-5 text-white/60" />
                       <div className="text-left">
                         <div className="text-white/50 text-xs">Humidity</div>
-                        <div className="text-white text-lg font-light">{weather.main.humidity}%</div>
+                        <div className="text-white text-base sm:text-lg font-light">{weather.main.humidity}%</div>
                       </div>
                     </div>
                   </motion.div>
@@ -516,7 +516,7 @@ export function IntegratedWeatherPage() {
 
                 {/* Center - Large Weather Icon */}
                 <motion.div
-                  className="flex items-center justify-center -ml-80 -mr-4"
+                  className="flex items-center justify-center lg:-ml-80 lg:-mr-4 order-first lg:order-none"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5, type: 'spring' }}
@@ -529,7 +529,7 @@ export function IntegratedWeatherPage() {
                   initial={{ x: 100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.5 }}
-                  className="flex items-center pr-12"
+                  className="flex items-center px-4 sm:pr-12"
                 >
                   <div className="bg-white/10 backdrop-blur-md p-6 w-full rounded-2xl border border-white/20">
                     <div className="space-y-3">

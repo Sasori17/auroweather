@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import type { WeatherData, ForecastData, AirQualityData } from '@/types/weather';
+import { checkRateLimit, incrementCallCount } from '@/lib/rateLimiter';
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
@@ -18,6 +19,13 @@ export function useWeatherData() {
   const fetchWeatherByCity = useCallback(async (cityName: string) => {
     if (!API_KEY) {
       setError('API key is missing. Please add NEXT_PUBLIC_OPENWEATHER_API_KEY to your .env.local file.');
+      return;
+    }
+
+    // Check rate limit before making API calls
+    if (!checkRateLimit(3)) {
+      setError('Limite quotidienne d\'appels API atteinte (1000/jour). Réessayez demain à minuit.');
+      setLoading(false);
       return;
     }
 
@@ -44,6 +52,8 @@ export function useWeatherData() {
       const weatherData: WeatherData = await weatherResponse.json();
       setWeather(weatherData);
       setCity(weatherData.name);
+      // Increment counter after successful weather fetch
+      incrementCallCount(1);
 
       // Fetch 5-day forecast
       const forecastResponse = await fetch(
@@ -53,6 +63,8 @@ export function useWeatherData() {
       if (forecastResponse.ok) {
         const forecastData: ForecastData = await forecastResponse.json();
         setForecast(forecastData);
+        // Increment counter after successful forecast fetch
+        incrementCallCount(1);
       }
 
       // Fetch air quality
@@ -63,6 +75,8 @@ export function useWeatherData() {
       if (airQualityResponse.ok) {
         const airQualityData: AirQualityData = await airQualityResponse.json();
         setAirQuality(airQualityData);
+        // Increment counter after successful air quality fetch
+        incrementCallCount(1);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
@@ -77,6 +91,13 @@ export function useWeatherData() {
   const fetchWeatherByCoords = useCallback(async (lat: number, lon: number) => {
     if (!API_KEY) {
       setError('API key is missing. Please add NEXT_PUBLIC_OPENWEATHER_API_KEY to your .env.local file.');
+      return;
+    }
+
+    // Check rate limit before making API calls
+    if (!checkRateLimit(3)) {
+      setError('Limite quotidienne d\'appels API atteinte (1000/jour). Réessayez demain à minuit.');
+      setLoading(false);
       return;
     }
 
@@ -101,6 +122,8 @@ export function useWeatherData() {
       const weatherData: WeatherData = await weatherResponse.json();
       setWeather(weatherData);
       setCity(weatherData.name);
+      // Increment counter after successful weather fetch
+      incrementCallCount(1);
 
       // Fetch 5-day forecast
       const forecastResponse = await fetch(
@@ -110,6 +133,8 @@ export function useWeatherData() {
       if (forecastResponse.ok) {
         const forecastData: ForecastData = await forecastResponse.json();
         setForecast(forecastData);
+        // Increment counter after successful forecast fetch
+        incrementCallCount(1);
       }
 
       // Fetch air quality
@@ -120,6 +145,8 @@ export function useWeatherData() {
       if (airQualityResponse.ok) {
         const airQualityData: AirQualityData = await airQualityResponse.json();
         setAirQuality(airQualityData);
+        // Increment counter after successful air quality fetch
+        incrementCallCount(1);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch weather data');

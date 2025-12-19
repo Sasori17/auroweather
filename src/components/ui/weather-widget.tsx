@@ -4,6 +4,7 @@ import * as React from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Cloud, CloudRain, Snowflake, Loader2, MapPin, RefreshCw, Sun, Moon, CloudLightning, CloudFog as CloudMist, Thermometer } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { checkRateLimit, incrementCallCount } from "@/lib/rateLimiter"
 
 export type WeatherType = 'clear' | 'clouds' | 'rain' | 'snow' | 'thunderstorm' | 'mist' | 'unknown'
 
@@ -429,6 +430,16 @@ export function WeatherWidget({
   }, [isRefreshingDebounced]);
 
   const fetchWeather = React.useCallback(async (latitude: number, longitude: number) => {
+    // Check rate limit before making API call
+    if (!checkRateLimit(1)) {
+      const errorMessage = 'Limite quotidienne d\'appels API atteinte (1000/jour). Réessayez demain à minuit.';
+      setError(errorMessage);
+      setLoading(false);
+      setInitialLoad(false);
+      onError?.(errorMessage);
+      return;
+    }
+
     setRefreshing(true)
     try {
       let weatherData: WeatherData
@@ -484,7 +495,9 @@ export function WeatherWidget({
 
       setWeather(weatherData)
       onWeatherLoaded?.(weatherData)
-      
+      // Increment counter after successful fetch
+      incrementCallCount(1);
+
       // Announce to screen readers that weather has been updated
       const announceElement = document.getElementById('weather-update-announcement');
       if (announceElement) {

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import type { CitySuggestion } from '@/types/weather';
+import { checkRateLimit, incrementCallCount } from '@/lib/rateLimiter';
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 const GEO_URL = 'https://api.openweathermap.org/geo/1.0';
@@ -28,6 +29,12 @@ export function useCitySuggestions() {
 
     abortControllerRef.current = new AbortController();
 
+    // Check rate limit before making API call (silent failure for better UX)
+    if (!checkRateLimit(1)) {
+      setSuggestions([]);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -42,6 +49,8 @@ export function useCitySuggestions() {
 
       const data: CitySuggestion[] = await response.json();
       setSuggestions(data);
+      // Increment counter after successful fetch
+      incrementCallCount(1);
     } catch (err) {
       if (err instanceof Error && err.name !== 'AbortError') {
         setSuggestions([]);
