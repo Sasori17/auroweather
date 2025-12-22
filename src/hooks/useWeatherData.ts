@@ -35,7 +35,7 @@ export function useWeatherData() {
     try {
       // Fetch current weather
       const weatherResponse = await fetch(
-        `${BASE_URL}/weather?q=${encodeURIComponent(cityName)}&units=metric&appid=${API_KEY}`
+        `${BASE_URL}/weather?q=${encodeURIComponent(cityName)}&units=metric&lang=fr&appid=${API_KEY}`
       );
 
       if (!weatherResponse.ok) {
@@ -57,7 +57,7 @@ export function useWeatherData() {
 
       // Fetch 5-day forecast
       const forecastResponse = await fetch(
-        `${BASE_URL}/forecast?q=${encodeURIComponent(cityName)}&units=metric&appid=${API_KEY}`
+        `${BASE_URL}/forecast?q=${encodeURIComponent(cityName)}&units=metric&lang=fr&appid=${API_KEY}`
       );
 
       if (forecastResponse.ok) {
@@ -107,7 +107,7 @@ export function useWeatherData() {
     try {
       // Fetch current weather
       const weatherResponse = await fetch(
-        `${BASE_URL}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+        `${BASE_URL}/weather?lat=${lat}&lon=${lon}&units=metric&lang=fr&appid=${API_KEY}`
       );
 
       if (!weatherResponse.ok) {
@@ -127,7 +127,7 @@ export function useWeatherData() {
 
       // Fetch 5-day forecast
       const forecastResponse = await fetch(
-        `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+        `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&units=metric&lang=fr&appid=${API_KEY}`
       );
 
       if (forecastResponse.ok) {
