@@ -502,15 +502,12 @@ export function IntegratedWeatherPage() {
 
                   {/* Weather Description */}
                   <motion.h2
-                    className="text-xl sm:text-2xl lg:text-3xl font-light text-white/80"
+                    className="text-xl sm:text-2xl lg:text-3xl font-light text-white/80 capitalize"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
                   >
-                    {weather.weather[0].main}
-                    {weather.weather[0].main.toLowerCase() !== weather.weather[0].description.toLowerCase() && (
-                      <> with {weather.weather[0].description}</>
-                    )}
+                    {weather.weather[0].description}
                   </motion.h2>
 
                   {/* Wind and Humidity */}
