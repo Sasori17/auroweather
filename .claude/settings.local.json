@@ -29,7 +29,8 @@
       "Bash(npm test:*)",
       "Bash(cat:*)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(npm run lint)"
     ],
     "deny": [],
     "ask": []

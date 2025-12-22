@@ -16,20 +16,20 @@ const urbanist = Urbanist({
 });
 
 export const metadata: Metadata = {
-  title: "AuroWeather - Beautiful Weather Dashboard",
-  description: "A stunning weather dashboard with real-time data, fluid 3D elements, and beautiful glassmorphism design. Get weather updates, forecasts, and climate trends with clarity and precision.",
-  keywords: ["weather", "forecast", "dashboard", "glassmorphism", "3D", "real-time", "météo", "prévisions"],
+  title: "AuroWeather - Météo en temps réel",
+  description: "Application météo moderne avec données en temps réel, éléments 3D fluides et design glassmorphism élégant. Obtenez les prévisions météo, alertes et tendances climatiques avec clarté et précision.",
+  keywords: ["météo", "prévisions", "dashboard", "glassmorphism", "3D", "temps réel", "weather", "forecast"],
   authors: [{ name: "AuroWeather" }],
   openGraph: {
-    title: "AuroWeather - Beautiful Weather Dashboard",
-    description: "Real-time weather updates in a clean, visual layout with subtle 3D animations",
+    title: "AuroWeather - Météo en temps réel",
+    description: "Prévisions météo en temps réel dans une interface visuelle élégante avec animations 3D",
     type: "website",
-    locale: "en_US",
+    locale: "fr_FR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AuroWeather - Beautiful Weather Dashboard",
-    description: "Real-time weather updates with fluid 3D elements",
+    title: "AuroWeather - Météo en temps réel",
+    description: "Prévisions météo en temps réel avec éléments 3D fluides",
   },
   robots: {
     index: true,

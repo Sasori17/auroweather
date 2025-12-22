@@ -15,9 +15,11 @@ export function AdBanner({
   dataFullWidthResponsive = true,
   className = '',
 }: AdBannerProps) {
+  const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || 'ca-pub-0000000000000000';
+
   useEffect(() => {
     try {
-      // Charger les pubs AdSense
+      // Load AdSense ads
       if (typeof window !== 'undefined') {
         const windowWithAds = window as Window & { adsbygoogle?: unknown[] };
         (windowWithAds.adsbygoogle = windowWithAds.adsbygoogle || []).push({});
@@ -32,7 +34,7 @@ export function AdBanner({
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-1874448527310505"
+        data-ad-client={publisherId}
         data-ad-slot={dataAdSlot}
         data-ad-format={dataAdFormat}
         data-full-width-responsive={dataFullWidthResponsive.toString()}
@@ -41,11 +43,13 @@ export function AdBanner({
   );
 }
 
-// Bannière horizontale responsive
+// Horizontal responsive banner
 export function HorizontalAdBanner({ className = '' }: { className?: string }) {
+  const slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_HORIZONTAL || '0000000000';
+
   return (
     <AdBanner
-      dataAdSlot="1234567890" // Remplacer par votre slot ID
+      dataAdSlot={slotId}
       dataAdFormat="horizontal"
       dataFullWidthResponsive={true}
       className={className}
@@ -53,11 +57,13 @@ export function HorizontalAdBanner({ className = '' }: { className?: string }) {
   );
 }
 
-// Bannière verticale sidebar
+// Vertical sidebar banner
 export function VerticalAdBanner({ className = '' }: { className?: string }) {
+  const slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_VERTICAL || '0000000000';
+
   return (
     <AdBanner
-      dataAdSlot="0987654321" // Remplacer par votre slot ID
+      dataAdSlot={slotId}
       dataAdFormat="vertical"
       dataFullWidthResponsive={false}
       className={className}
@@ -65,11 +71,13 @@ export function VerticalAdBanner({ className = '' }: { className?: string }) {
   );
 }
 
-// Bannière carrée
+// Square banner
 export function SquareAdBanner({ className = '' }: { className?: string }) {
+  const slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_SQUARE || '0000000000';
+
   return (
     <AdBanner
-      dataAdSlot="1122334455" // Remplacer par votre slot ID
+      dataAdSlot={slotId}
       dataAdFormat="rectangle"
       dataFullWidthResponsive={false}
       className={className}

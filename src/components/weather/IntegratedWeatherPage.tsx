@@ -12,6 +12,7 @@ import { SunChart } from './SunChart';
 import { CompassDirection } from './CompassDirection';
 import type { CitySuggestion } from '@/types/weather';
 import { useCitySuggestions } from '@/hooks/useCitySuggestions';
+import { HorizontalAdBanner } from '@/components/ads/AdBanner';
 
 const COLORS_TOP = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
@@ -214,7 +215,7 @@ export function IntegratedWeatherPage() {
   }, [clearWeather, clearSuggestions]);
 
   const formatDate = () => {
-    return new Date().toLocaleDateString('en-US', {
+    return new Date().toLocaleDateString('fr-FR', {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
@@ -246,7 +247,7 @@ export function IntegratedWeatherPage() {
 
       if (!dailyMap[dateKey] || Math.abs(hour - 12) < Math.abs(dailyMap[dateKey].hour - 12)) {
         dailyMap[dateKey] = {
-          day: date.toLocaleDateString('en-US', { weekday: 'long' }),
+          day: date.toLocaleDateString('fr-FR', { weekday: 'long' }),
           temp: Math.round(item.main.temp),
           icon: item.weather[0].icon,
           main: item.weather[0].main,
@@ -307,7 +308,7 @@ export function IntegratedWeatherPage() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onFocus={() => setShowSuggestions(true)}
-                placeholder="Search city..."
+                placeholder="Rechercher une ville..."
                 className="w-full sm:w-56 pl-12 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-md text-white text-sm placeholder:text-white/50 focus:outline-none sm:focus:w-72 transition-all focus:bg-white/15"
               />
             </div>
@@ -430,6 +431,16 @@ export function IntegratedWeatherPage() {
                 <MapPin className="w-6 h-6" />
                 Utiliser ma position
               </motion.button>
+
+              {/* Ad Banner */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="mt-12 max-w-4xl w-full"
+              >
+                <HorizontalAdBanner className="rounded-xl overflow-hidden" />
+              </motion.div>
             </motion.div>
           ) : loading ? (
             <motion.div
@@ -455,7 +466,7 @@ export function IntegratedWeatherPage() {
                   onClick={handleLocationClick}
                   className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full text-white hover:bg-white/30 transition-colors border border-white/30"
                 >
-                  Try Again
+                  Réessayer
                 </button>
               </div>
             </motion.div>
@@ -512,14 +523,14 @@ export function IntegratedWeatherPage() {
                     <div className="flex items-center gap-2">
                       <Wind className="w-5 h-5 text-white/60" />
                       <div className="text-left">
-                        <div className="text-white/50 text-xs">Wind</div>
+                        <div className="text-white/50 text-xs">Vent</div>
                         <div className="text-white text-base sm:text-lg font-light">{Math.round(weather.wind.speed * 3.6)} km/h</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Droplets className="w-5 h-5 text-white/60" />
                       <div className="text-left">
-                        <div className="text-white/50 text-xs">Humidity</div>
+                        <div className="text-white/50 text-xs">Humidité</div>
                         <div className="text-white text-base sm:text-lg font-light">{weather.main.humidity}%</div>
                       </div>
                     </div>
@@ -579,6 +590,18 @@ export function IntegratedWeatherPage() {
                   <TemperatureGraph forecast={forecast} currentWeather={weather} />
                 </motion.div>
               )}
+
+              {/* Ad Banner after Temperature Graph */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.75 }}
+                className="w-full mb-12 flex justify-center"
+              >
+                <div className="max-w-5xl w-full">
+                  <HorizontalAdBanner className="rounded-xl overflow-hidden" />
+                </div>
+              </motion.div>
 
               {/* Additional Weather Details - Bottom Section */}
               <motion.div
