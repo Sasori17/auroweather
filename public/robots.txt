@@ -1,0 +1,40 @@
+# Robots.txt pour AuroWeather
+# Optimisé pour Google AdSense et SEO
+
+# Autoriser tous les robots par défaut
+User-agent: *
+Allow: /
+
+# Sitemap pour faciliter l'indexation
+Sitemap: https://auroweather.com/sitemap.xml
+
+# Bloquer les routes API (pas utiles pour l'indexation)
+Disallow: /api/
+
+# Bloquer les fichiers Next.js internes
+Disallow: /_next/static/
+Disallow: /_next/image/
+
+# Bloquer la page de test API (optionnel)
+# Disallow: /test-api
+
+# Autoriser explicitement les pages importantes pour AdSense
+Allow: /
+Allow: /a-propos
+Allow: /guide
+Allow: /glossaire
+Allow: /contact
+Allow: /confidentialite
+Allow: /conditions
+
+# Bots spécifiques - Google
+User-agent: Googlebot
+Allow: /
+
+# Bots spécifiques - Google AdSense
+User-agent: Mediapartners-Google
+Allow: /
+
+# Bots spécifiques - Bing
+User-agent: Bingbot
+Allow: /

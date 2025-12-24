@@ -184,70 +184,8 @@ Ce message a été envoyé depuis le formulaire de contact d'AuroWeather.
       `.trim(),
     };
 
-    // Confirmation email to user
-    const mailOptionsToUser = {
-      from: process.env.SMTP_EMAIL,
-      to: email,
-      subject: 'Confirmation de réception - AuroWeather',
-      text: `
-Bonjour ${name},
-
-Nous avons bien reçu votre message concernant "${subject}".
-
-Notre équipe vous répondra dans les plus brefs délais.
-
-Merci de votre intérêt pour AuroWeather !
-
----
-L'équipe AuroWeather
-https://auroweather.com
-      `.trim(),
-      html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
-    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
-    .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin-top: 20px; }
-    .footer { text-align: center; color: #718096; font-size: 12px; margin-top: 30px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1 style="margin: 0;">AuroWeather</h1>
-      <p style="margin: 10px 0 0 0; opacity: 0.9;">Confirmation de réception</p>
-    </div>
-    <div class="content">
-      <p>Bonjour <strong>${name}</strong>,</p>
-
-      <p>Nous avons bien reçu votre message concernant <strong>"${subject}"</strong>.</p>
-
-      <p>Notre équipe examinera votre demande et vous répondra dans les plus brefs délais à l'adresse <strong>${email}</strong>.</p>
-
-      <p>Merci de votre intérêt pour AuroWeather !</p>
-
-      <div style="text-align: center;">
-        <a href="https://auroweather.com" class="button">Retour au site</a>
-      </div>
-
-      <div class="footer">
-        <p>L'équipe AuroWeather</p>
-        <p>Ce message a été envoyé automatiquement, merci de ne pas y répondre.</p>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-      `.trim(),
-    };
-
-    // Send emails
+    // Send email to admin only (no confirmation email to user)
     await transporter.sendMail(mailOptionsToAdmin);
-    await transporter.sendMail(mailOptionsToUser);
 
     return NextResponse.json(
       { message: 'Message envoyé avec succès' },

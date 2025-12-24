@@ -233,7 +233,6 @@ export function ContactForm() {
               <p className="text-green-300 font-medium">Message envoyé avec succès !</p>
               <p className="text-green-200/70 text-sm mt-1">
                 Nous avons bien reçu votre message et vous répondrons dans les plus brefs délais.
-                Un email de confirmation vous a été envoyé.
               </p>
             </div>
           </motion.div>
