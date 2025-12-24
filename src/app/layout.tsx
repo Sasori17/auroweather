@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import { GoogleAdsense } from "@/components/ads/GoogleAdsense";
+import { Footer } from "@/components/layout/Footer";
+import { CookieConsent } from "@/components/cookies/CookieConsent";
+import { RecaptchaProvider } from "@/components/providers/RecaptchaProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -50,10 +53,16 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${urbanist.variable} antialiased`}
+        className={`${inter.variable} ${urbanist.variable} antialiased flex flex-col min-h-screen`}
       >
         <GoogleAdsense />
-        {children}
+        <RecaptchaProvider>
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <CookieConsent />
+        </RecaptchaProvider>
       </body>
     </html>
   );
