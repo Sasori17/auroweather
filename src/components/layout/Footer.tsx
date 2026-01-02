@@ -30,6 +30,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/blog"
+                  className="text-white/60 hover:text-white text-sm transition-colors"
+                >
+                  Blog météo
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/guide"
                   className="text-white/60 hover:text-white text-sm transition-colors"
                 >

@@ -142,3 +142,18 @@ export interface AirQualityData {
     dt: number;
   }>;
 }
+
+export interface FavoriteCity {
+  id: string;
+  name: string;
+  country: string;
+  state?: string;
+  lat: number;
+  lon: number;
+  addedAt: number;
+}
+
+export interface FavoritesData {
+  cities: FavoriteCity[];
+  maxFavorites: number;
+}

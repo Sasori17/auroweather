@@ -31,7 +31,9 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(npm run lint)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:support.google.com)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

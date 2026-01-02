@@ -5,11 +5,14 @@ import { Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionTemplate, useMotionValue, animate } from 'framer-motion';
-import { Search, MapPin, Wind, Droplets, Cloud, CloudRain, Sun, Snowflake, CloudLightning, Gauge, Eye, Compass, Thermometer, ArrowUpDown, CloudDrizzle } from 'lucide-react';
+import { Search, MapPin, Wind, Droplets, Cloud, CloudRain, Sun, Snowflake, CloudLightning, Gauge, Eye, Compass, Thermometer, ArrowUpDown, CloudDrizzle, Star } from 'lucide-react';
 import { useWeatherData } from '@/hooks/useWeatherData';
+import { useFavorites } from '@/hooks/useFavorites';
 import { TemperatureGraph } from './TemperatureGraph';
 import { SunChart } from './SunChart';
 import { CompassDirection } from './CompassDirection';
+import { FavoriteButton } from './FavoriteButton';
+import { FavoritesDropdown } from './FavoritesDropdown';
 import type { CitySuggestion } from '@/types/weather';
 import { useCitySuggestions } from '@/hooks/useCitySuggestions';
 import { HorizontalAdBanner } from '@/components/ads/AdBanner';
@@ -163,6 +166,7 @@ export function IntegratedWeatherPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { suggestions, loading: suggestionsLoading, fetchSuggestions, clearSuggestions } = useCitySuggestions();
+  const { favorites, isFavorite, toggleFavorite, removeFavorite } = useFavorites();
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -297,6 +301,13 @@ export function IntegratedWeatherPage() {
 
           {/* Center - Date */}
           <div className="text-white/80 text-xs sm:text-sm hidden md:block">({formatDate()})</div>
+
+          {/* Favorites Dropdown */}
+          <FavoritesDropdown
+            onCitySelect={(city) => fetchWeatherByCoords(city.lat, city.lon)}
+            border={border}
+            boxShadow={boxShadow}
+          />
 
           {/* Right side - Search */}
           <div ref={containerRef} className="relative w-full sm:w-auto">
@@ -485,6 +496,14 @@ export function IntegratedWeatherPage() {
                   <div className="flex items-center gap-2 text-white/80">
                     <MapPin className="w-5 h-5" />
                     <span className="text-lg">{weather.name}, {weather.sys.country}</span>
+                    <FavoriteButton
+                      city={{
+                        name: weather.name,
+                        country: weather.sys.country,
+                        lat: weather.coord.lat,
+                        lon: weather.coord.lon,
+                      }}
+                    />
                   </div>
 
                   {/* Large Temperature */}
