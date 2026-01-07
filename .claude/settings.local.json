@@ -33,7 +33,9 @@
       "Bash(npm run lint)",
       "Bash(ls:*)",
       "WebFetch(domain:support.google.com)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(del \"C:\\\\wamp64\\\\www\\\\nextJS\\\\meteo\\\\auroweather.com\\\\public\\\\sitemap.xml\")",
+      "Bash(del \"C:\\\\wamp64\\\\www\\\\nextJS\\\\meteo\\\\auroweather.com\\\\public\\\\robots.txt\")"
     ],
     "deny": [],
     "ask": []

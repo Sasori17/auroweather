@@ -11,6 +11,27 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  // SEO and redirect configuration
+  async redirects() {
+    return [
+      // Redirect www to non-www
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.auroweather.fr',
+          },
+        ],
+        destination: 'https://auroweather.fr/:path*',
+        permanent: true,
+      },
+    ];
+  },
+
+  // Remove trailing slashes
+  trailingSlash: false,
 };
 
 export default nextConfig;

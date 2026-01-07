@@ -150,3 +150,7 @@ Key files for understanding system:
 - `src/components/weather/ForecastCard.tsx` - Forecast display logic
 - `src/components/ads/AdBanner.tsx` - Ad component implementation
 - `ADSENSE_SETUP.md` - Complete AdSense setup guide
+
+## url web
+
+https://auroweather.fr

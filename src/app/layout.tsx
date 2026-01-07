@@ -19,15 +19,21 @@ const urbanist = Urbanist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://auroweather.fr'),
   title: "AuroWeather - Météo en temps réel",
   description: "Application météo moderne avec données en temps réel, éléments 3D fluides et design glassmorphism élégant. Obtenez les prévisions météo, alertes et tendances climatiques avec clarté et précision.",
   keywords: ["météo", "prévisions", "dashboard", "glassmorphism", "3D", "temps réel", "weather", "forecast"],
   authors: [{ name: "AuroWeather" }],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: "AuroWeather - Météo en temps réel",
     description: "Prévisions météo en temps réel dans une interface visuelle élégante avec animations 3D",
     type: "website",
     locale: "fr_FR",
+    url: '/',
+    siteName: 'AuroWeather',
   },
   twitter: {
     card: "summary_large_image",
