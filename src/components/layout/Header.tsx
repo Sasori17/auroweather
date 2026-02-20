@@ -14,7 +14,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <Link href={homeHref} className="flex items-center gap-2 font-bold text-xl transition-all hover:opacity-80 hover:scale-105 cursor-pointer">
           <Image
-            src="/logo/auroraweather-logo.svg"
+            src="/logo/logo.jpg"
             alt="AuroWeather Logo"
             width={40}
             height={40}

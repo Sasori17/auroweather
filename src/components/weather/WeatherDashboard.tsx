@@ -267,9 +267,9 @@ export function WeatherDashboard({ withHeroBackground = false }: WeatherDashboar
           {/* Left side - Logo */}
           <div className="flex items-center gap-3">
             <img
-              src="/logo/auroraweather-logo.svg"
+              src="/logo/logo.jpg"
               alt="AuroWeather Logo"
-              className="w-10 h-10"
+              className="w-10 h-10 rounded-full"
             />
             <h1 className="text-xl font-bold text-white">AuroWeather</h1>
           </div>

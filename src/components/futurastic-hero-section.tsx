@@ -83,9 +83,9 @@ export const AuroraHero = ({ onCitySelect, onLocationClick }: AuroraHeroProps) =
           className="flex items-center gap-3 mb-8"
         >
           <img
-            src="/logo/auroraweather-logo.svg"
+            src="/logo/logo.jpg"
             alt="AuroWeather Logo"
-            className="w-16 h-16"
+            className="w-16 h-16 rounded-full"
           />
           <h1 className="text-3xl font-bold text-white">AuroWeather</h1>
         </motion.div>

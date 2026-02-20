@@ -297,9 +297,9 @@ export function IntegratedWeatherPage() {
             className="flex items-center gap-3 transition-all hover:opacity-80 hover:scale-105 cursor-pointer bg-transparent border-none p-0"
           >
             <img
-              src="/logo/auroraweather-logo.svg"
+              src="/logo/logo.jpg"
               alt="AuroWeather Logo"
-              className="w-8 h-8 sm:w-10 sm:h-10"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
             />
             <h1 className="text-lg sm:text-xl font-bold text-white">AuroWeather</h1>
           </button>
@@ -375,9 +375,9 @@ export function IntegratedWeatherPage() {
                 className="mb-6 sm:mb-8"
               >
                 <img
-                  src="/logo/auroraweather-logo.svg"
+                  src="/logo/logo.jpg"
                   alt="AuroWeather"
-                  className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-[0_0_50px_rgba(59,130,246,0.5)]"
+                  className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-[0_0_50px_rgba(59,130,246,0.5)] rounded-2xl"
                 />
               </motion.div>
 
