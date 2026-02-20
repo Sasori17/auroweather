@@ -44,7 +44,7 @@ export function LanguageSelector() {
         title="Français"
         aria-label="Passer en français"
       >
-        🇫🇷 FR
+        FR
       </button>
       <button
         onClick={() => switchLocale('en')}
@@ -56,7 +56,7 @@ export function LanguageSelector() {
         title="English"
         aria-label="Switch to English"
       >
-        🇬🇧 EN
+        EN
       </button>
     </div>
   );
