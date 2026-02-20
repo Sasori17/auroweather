@@ -8,6 +8,7 @@ import { motion, AnimatePresence, useMotionTemplate, useMotionValue, animate } f
 import { Search, MapPin, Wind, Droplets, Cloud, CloudRain, Sun, Snowflake, CloudLightning, Gauge, Eye, Compass, Thermometer, ArrowUpDown, CloudDrizzle, Star } from 'lucide-react';
 import { useWeatherData } from '@/hooks/useWeatherData';
 import { useFavorites } from '@/hooks/useFavorites';
+import { useTranslation } from '@/i18n/useTranslation';
 import { TemperatureGraph } from './TemperatureGraph';
 import { SunChart } from './SunChart';
 import { CompassDirection } from './CompassDirection';
@@ -16,6 +17,7 @@ import { FavoritesDropdown } from './FavoritesDropdown';
 import type { CitySuggestion } from '@/types/weather';
 import { useCitySuggestions } from '@/hooks/useCitySuggestions';
 import { HorizontalAdBanner } from '@/components/ads/AdBanner';
+import { LanguageSelector } from '@/components/layout/LanguageSelector';
 
 const COLORS_TOP = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
@@ -41,37 +43,39 @@ function getWeatherIcon(main: string, size: 'sm' | 'lg' = 'sm') {
   return <Cloud className={`${className} text-slate-300`} />;
 }
 
-function getWindDirection(deg: number): string {
-  const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO'];
+function getWindDirection(deg: number, windAbbr: readonly string[]): string {
   const index = Math.round(((deg % 360) / 22.5));
-  return directions[index % 16];
+  return windAbbr[index % 16];
 }
 
-function getFullWindDirection(deg: number): string {
-  const directions = [
-    'Nord', 'Nord-Nord-Est', 'Nord-Est', 'Est-Nord-Est',
-    'Est', 'Est-Sud-Est', 'Sud-Est', 'Sud-Sud-Est',
-    'Sud', 'Sud-Sud-Ouest', 'Sud-Ouest', 'Ouest-Sud-Ouest',
-    'Ouest', 'Ouest-Nord-Ouest', 'Nord-Ouest', 'Nord-Nord-Ouest'
-  ];
+function getFullWindDirection(deg: number, windFull: readonly string[]): string {
   const index = Math.round(((deg % 360) / 22.5));
-  return directions[index % 16];
+  return windFull[index % 16];
 }
 
-function getAirQualityInfo(aqi: number): { label: string; color: string; bgColor: string } {
+type AirQualityLabels = {
+  air_quality_good: string;
+  air_quality_fair: string;
+  air_quality_moderate: string;
+  air_quality_poor: string;
+  air_quality_very_poor: string;
+  air_quality_unknown: string;
+};
+
+function getAirQualityInfo(aqi: number, labels: AirQualityLabels): { label: string; color: string; bgColor: string } {
   switch (aqi) {
     case 1:
-      return { label: 'Bonne', color: 'text-green-400', bgColor: 'bg-green-500/20' };
+      return { label: labels.air_quality_good, color: 'text-green-400', bgColor: 'bg-green-500/20' };
     case 2:
-      return { label: 'Correcte', color: 'text-lime-400', bgColor: 'bg-lime-500/20' };
+      return { label: labels.air_quality_fair, color: 'text-lime-400', bgColor: 'bg-lime-500/20' };
     case 3:
-      return { label: 'Moyenne', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' };
+      return { label: labels.air_quality_moderate, color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' };
     case 4:
-      return { label: 'Mauvaise', color: 'text-orange-400', bgColor: 'bg-orange-500/20' };
+      return { label: labels.air_quality_poor, color: 'text-orange-400', bgColor: 'bg-orange-500/20' };
     case 5:
-      return { label: 'Très mauvaise', color: 'text-red-400', bgColor: 'bg-red-500/20' };
+      return { label: labels.air_quality_very_poor, color: 'text-red-400', bgColor: 'bg-red-500/20' };
     default:
-      return { label: 'Inconnue', color: 'text-gray-400', bgColor: 'bg-gray-500/20' };
+      return { label: labels.air_quality_unknown, color: 'text-gray-400', bgColor: 'bg-gray-500/20' };
   }
 }
 
@@ -161,8 +165,9 @@ function LargeWeatherIcon({ main }: { main: string }) {
 }
 
 export function IntegratedWeatherPage() {
+  const { t, locale } = useTranslation();
   const color = useMotionValue(COLORS_TOP[0]);
-  const { weather, forecast, airQuality, loading, error, fetchWeatherByCoords, getCurrentLocation, clearWeather } = useWeatherData();
+  const { weather, forecast, airQuality, loading, error, fetchWeatherByCoords, getCurrentLocation, clearWeather } = useWeatherData(locale);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { suggestions, loading: suggestionsLoading, fetchSuggestions, clearSuggestions } = useCitySuggestions();
@@ -219,7 +224,7 @@ export function IntegratedWeatherPage() {
   }, [clearWeather, clearSuggestions]);
 
   const formatDate = () => {
-    return new Date().toLocaleDateString('fr-FR', {
+    return new Date().toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
@@ -251,7 +256,7 @@ export function IntegratedWeatherPage() {
 
       if (!dailyMap[dateKey] || Math.abs(hour - 12) < Math.abs(dailyMap[dateKey].hour - 12)) {
         dailyMap[dateKey] = {
-          day: date.toLocaleDateString('fr-FR', { weekday: 'long' }),
+          day: date.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'long' }),
           temp: Math.round(item.main.temp),
           icon: item.weather[0].icon,
           main: item.weather[0].main,
@@ -302,6 +307,9 @@ export function IntegratedWeatherPage() {
           {/* Center - Date */}
           <div className="text-white/80 text-xs sm:text-sm hidden md:block">({formatDate()})</div>
 
+          {/* Language Selector */}
+          <LanguageSelector />
+
           {/* Favorites Dropdown */}
           <FavoritesDropdown
             onCitySelect={(city) => fetchWeatherByCoords(city.lat, city.lon)}
@@ -319,7 +327,7 @@ export function IntegratedWeatherPage() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onFocus={() => setShowSuggestions(true)}
-                placeholder="Rechercher une ville..."
+                placeholder={t.search.placeholder}
                 className="w-full sm:w-56 pl-12 pr-4 py-3 rounded-full bg-white/10 backdrop-blur-md text-white text-sm placeholder:text-white/50 focus:outline-none sm:focus:w-72 transition-all focus:bg-white/15"
               />
             </div>
@@ -379,7 +387,7 @@ export function IntegratedWeatherPage() {
                 transition={{ delay: 0.3 }}
                 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-white via-blue-100 to-purple-200 bg-clip-text text-transparent text-center mb-4 px-4"
               >
-                Bienvenue sur AuroWeather
+                {t.home.welcome}
               </motion.h2>
 
               <motion.p
@@ -388,8 +396,7 @@ export function IntegratedWeatherPage() {
                 transition={{ delay: 0.4 }}
                 className="text-base sm:text-lg lg:text-xl text-white/70 text-center max-w-2xl mb-8 sm:mb-12 px-6"
               >
-                Découvrez les prévisions météo en temps réel avec une interface moderne et élégante.
-                Recherchez votre ville pour commencer.
+                {t.home.subtitle}
               </motion.p>
 
               <motion.div
@@ -402,30 +409,24 @@ export function IntegratedWeatherPage() {
                   <div className="flex justify-center mb-4">
                     <Sun className="w-12 h-12 text-amber-400" />
                   </div>
-                  <h3 className="text-white font-semibold mb-2">Météo en temps réel</h3>
-                  <p className="text-white/60 text-sm">
-                    Obtenez les conditions météorologiques actuelles et précises pour n'importe quelle ville
-                  </p>
+                  <h3 className="text-white font-semibold mb-2">{t.home.realtime}</h3>
+                  <p className="text-white/60 text-sm">{t.home.realtimeDesc}</p>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center">
                   <div className="flex justify-center mb-4">
                     <CloudRain className="w-12 h-12 text-blue-400" />
                   </div>
-                  <h3 className="text-white font-semibold mb-2">Prévisions 6 jours</h3>
-                  <p className="text-white/60 text-sm">
-                    Consultez les prévisions détaillées pour planifier vos activités en toute sérénité
-                  </p>
+                  <h3 className="text-white font-semibold mb-2">{t.home.forecast}</h3>
+                  <p className="text-white/60 text-sm">{t.home.forecastDesc}</p>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center">
                   <div className="flex justify-center mb-4">
                     <Wind className="w-12 h-12 text-green-400" />
                   </div>
-                  <h3 className="text-white font-semibold mb-2">Données complètes</h3>
-                  <p className="text-white/60 text-sm">
-                    Température, vent, humidité, pression, visibilité et qualité de l'air
-                  </p>
+                  <h3 className="text-white font-semibold mb-2">{t.home.data}</h3>
+                  <p className="text-white/60 text-sm">{t.home.dataDesc}</p>
                 </div>
               </motion.div>
 
@@ -440,7 +441,7 @@ export function IntegratedWeatherPage() {
                 className="mt-12 px-8 py-4 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors flex items-center gap-3 text-lg"
               >
                 <MapPin className="w-6 h-6" />
-                Utiliser ma position
+                {t.home.useLocation}
               </motion.button>
 
               {/* Ad Banner */}
@@ -477,7 +478,7 @@ export function IntegratedWeatherPage() {
                   onClick={handleLocationClick}
                   className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full text-white hover:bg-white/30 transition-colors border border-white/30"
                 >
-                  Réessayer
+                  {t.common.retry}
                 </button>
               </div>
             </motion.div>
@@ -539,14 +540,14 @@ export function IntegratedWeatherPage() {
                     <div className="flex items-center gap-2">
                       <Wind className="w-5 h-5 text-white/60" />
                       <div className="text-left">
-                        <div className="text-white/50 text-xs">Vent</div>
+                        <div className="text-white/50 text-xs">{t.weather.wind}</div>
                         <div className="text-white text-base sm:text-lg font-light">{Math.round(weather.wind.speed * 3.6)} km/h</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Droplets className="w-5 h-5 text-white/60" />
                       <div className="text-left">
-                        <div className="text-white/50 text-xs">Humidité</div>
+                        <div className="text-white/50 text-xs">{t.weather.humidity}</div>
                         <div className="text-white text-base sm:text-lg font-light">{weather.main.humidity}%</div>
                       </div>
                     </div>
@@ -633,7 +634,7 @@ export function IntegratedWeatherPage() {
 
                 {/* Pressure & Visibility */}
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20">
-                  <h3 className="text-white/70 text-sm font-medium mb-6">Pression & Visibilité</h3>
+                  <h3 className="text-white/70 text-sm font-medium mb-6">{t.weather.pressureVis}</h3>
 
                   <div className="space-y-6">
                     {/* Pressure */}
@@ -647,7 +648,7 @@ export function IntegratedWeatherPage() {
                           <Gauge className="w-6 h-6 text-purple-400" />
                         </div>
                         <div className="flex-1">
-                          <div className="text-white/50 text-xs mb-1">Pression atmosphérique</div>
+                          <div className="text-white/50 text-xs mb-1">{t.weather.pressure}</div>
                           <div className="text-white text-2xl font-light">{weather.main.pressure} hPa</div>
                         </div>
                       </div>
@@ -662,9 +663,9 @@ export function IntegratedWeatherPage() {
                           />
                         </div>
                         <div className="flex justify-between mt-1 text-xs text-white/40">
-                          <span>Bas</span>
-                          <span>Normal</span>
-                          <span>Haut</span>
+                          <span>{t.weather.pressure_low}</span>
+                          <span>{t.weather.pressure_normal}</span>
+                          <span>{t.weather.pressure_high}</span>
                         </div>
                       </div>
                     </motion.div>
@@ -680,7 +681,7 @@ export function IntegratedWeatherPage() {
                           <Eye className="w-6 h-6 text-green-400" />
                         </div>
                         <div className="flex-1">
-                          <div className="text-white/50 text-xs mb-1">Visibilité</div>
+                          <div className="text-white/50 text-xs mb-1">{t.weather.visibility}</div>
                           <div className="text-white text-2xl font-light">
                             {(weather.visibility / 1000).toFixed(1)} km
                           </div>
@@ -697,9 +698,9 @@ export function IntegratedWeatherPage() {
                           />
                         </div>
                         <div className="flex justify-between mt-1 text-xs text-white/40">
-                          <span>Faible</span>
-                          <span>Modérée</span>
-                          <span>Excellente</span>
+                          <span>{t.weather.visibility_low}</span>
+                          <span>{t.weather.visibility_moderate}</span>
+                          <span>{t.weather.visibility_excellent}</span>
                         </div>
                       </div>
                     </motion.div>
@@ -716,7 +717,7 @@ export function IntegratedWeatherPage() {
                             <CloudDrizzle className="w-6 h-6 text-blue-400" />
                           </div>
                           <div className="flex-1">
-                            <div className="text-white/50 text-xs mb-1">Risque de pluie (3h)</div>
+                            <div className="text-white/50 text-xs mb-1">{t.weather.rainRisk}</div>
                             <div className="text-white text-2xl font-light">
                               {Math.round(forecast.list[0].pop * 100)}%
                             </div>
@@ -733,9 +734,9 @@ export function IntegratedWeatherPage() {
                             />
                           </div>
                           <div className="flex justify-between mt-1 text-xs text-white/40">
-                            <span>Faible</span>
-                            <span>Modéré</span>
-                            <span>Élevé</span>
+                            <span>{t.weather.rain_low}</span>
+                            <span>{t.weather.rain_moderate}</span>
+                            <span>{t.weather.rain_high}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -749,13 +750,13 @@ export function IntegratedWeatherPage() {
                         transition={{ delay: 1.2 }}
                       >
                         <div className="flex items-center gap-4">
-                          <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${getAirQualityInfo(airQuality.list[0].main.aqi).bgColor}`}>
-                            <Wind className={`w-6 h-6 ${getAirQualityInfo(airQuality.list[0].main.aqi).color}`} />
+                          <div className={`flex items-center justify-center w-12 h-12 rounded-xl ${getAirQualityInfo(airQuality.list[0].main.aqi, t.weather).bgColor}`}>
+                            <Wind className={`w-6 h-6 ${getAirQualityInfo(airQuality.list[0].main.aqi, t.weather).color}`} />
                           </div>
                           <div className="flex-1">
-                            <div className="text-white/50 text-xs mb-1">Qualité de l'air</div>
-                            <div className={`text-2xl font-light ${getAirQualityInfo(airQuality.list[0].main.aqi).color}`}>
-                              {getAirQualityInfo(airQuality.list[0].main.aqi).label}
+                            <div className="text-white/50 text-xs mb-1">{t.weather.airQuality}</div>
+                            <div className={`text-2xl font-light ${getAirQualityInfo(airQuality.list[0].main.aqi, t.weather).color}`}>
+                              {getAirQualityInfo(airQuality.list[0].main.aqi, t.weather).label}
                             </div>
                           </div>
                         </div>
@@ -770,9 +771,9 @@ export function IntegratedWeatherPage() {
                             />
                           </div>
                           <div className="flex justify-between mt-1 text-xs text-white/40">
-                            <span>Bonne</span>
-                            <span>Moyenne</span>
-                            <span>Mauvaise</span>
+                            <span>{t.weather.air_good}</span>
+                            <span>{t.weather.air_moderate}</span>
+                            <span>{t.weather.air_bad}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -782,7 +783,7 @@ export function IntegratedWeatherPage() {
 
                 {/* Additional Metrics */}
                 <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20">
-                  <h3 className="text-white/70 text-sm font-medium mb-6">Autres informations</h3>
+                  <h3 className="text-white/70 text-sm font-medium mb-6">{t.weather.otherInfo}</h3>
 
                   <div className="space-y-4">
                     {/* Feels Like */}
@@ -796,7 +797,7 @@ export function IntegratedWeatherPage() {
                         <Thermometer className="w-5 h-5 text-blue-400" />
                       </div>
                       <div className="flex items-center justify-between flex-1">
-                        <span className="text-white/60 text-sm">Ressenti</span>
+                        <span className="text-white/60 text-sm">{t.weather.feelsLike}</span>
                         <span className="text-white text-lg font-light">{Math.round(weather.main.feels_like)}°C</span>
                       </div>
                     </motion.div>
@@ -812,7 +813,7 @@ export function IntegratedWeatherPage() {
                         <ArrowUpDown className="w-5 h-5 text-blue-400" />
                       </div>
                       <div className="flex items-center justify-between flex-1">
-                        <span className="text-white/60 text-sm">Min / Max</span>
+                        <span className="text-white/60 text-sm">{t.weather.minMax}</span>
                         <span className="text-white text-lg font-light">
                           <span className="text-blue-400">{Math.round(weather.main.temp_min)}°</span>
                           {' / '}
@@ -833,7 +834,7 @@ export function IntegratedWeatherPage() {
                           <Cloud className="w-5 h-5 text-blue-400" />
                         </div>
                         <div className="flex items-center justify-between flex-1">
-                          <span className="text-white/60 text-sm">Couverture nuageuse</span>
+                          <span className="text-white/60 text-sm">{t.weather.cloudCover}</span>
                           <span className="text-white text-lg font-light">{weather.clouds.all}%</span>
                         </div>
                       </motion.div>
@@ -849,14 +850,14 @@ export function IntegratedWeatherPage() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Compass className="w-4 h-4 text-blue-400" style={{ transform: `rotate(${weather.wind.deg}deg)` }} />
-                          <span className="text-white/60 text-sm">Direction du vent</span>
+                          <span className="text-white/60 text-sm">{t.weather.windDirection}</span>
                         </div>
                         <div className="flex flex-col items-end gap-0.5">
                           <div className="flex items-center gap-2">
-                            <span className="text-white text-lg font-light">{getWindDirection(weather.wind.deg)}</span>
+                            <span className="text-white text-lg font-light">{getWindDirection(weather.wind.deg, t.weather.windAbbr)}</span>
                             <span className="text-white/50 text-sm">({Math.round(weather.wind.speed * 3.6)} km/h)</span>
                           </div>
-                          <span className="text-white/60 text-xs">{getFullWindDirection(weather.wind.deg)}</span>
+                          <span className="text-white/60 text-xs">{getFullWindDirection(weather.wind.deg, t.weather.windFull)}</span>
                         </div>
                       </div>
 

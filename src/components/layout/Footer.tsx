@@ -1,7 +1,15 @@
 import Link from 'next/link';
+import { getTranslation } from '@/i18n/getTranslation';
+import type { Locale } from '@/i18n/index';
 
-export function Footer() {
+interface FooterProps {
+  locale?: Locale;
+}
+
+export function Footer({ locale = 'fr' }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const t = getTranslation(locale);
+  const prefix = locale === 'en' ? '/en' : '';
 
   return (
     <footer className="relative z-10 mt-auto py-8 px-6 border-t border-white/10">
@@ -11,53 +19,37 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">AuroWeather</h3>
             <p className="text-white/60 text-sm leading-relaxed">
-              Votre application météo moderne avec prévisions en temps réel,
-              interface élégante et données précises pour toutes vos activités.
+              {t.footer.aboutText}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Liens rapides</h3>
+            <h3 className="text-white font-semibold mb-4">{t.footer.quickLinks}</h3>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="/a-propos"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  À propos
+                <Link href={`${prefix}/a-propos`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.about}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/blog"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  Blog météo
+                <Link href={`${prefix}/blog`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.blog}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/guide"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  Guide météo
+                <Link href={`${prefix}/guide`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.guide}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/glossaire"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  Glossaire
+                <Link href={`${prefix}/glossaire`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.glossary}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  Contact
+                <Link href={`${prefix}/contact`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.contact}
                 </Link>
               </li>
             </ul>
@@ -65,22 +57,16 @@ export function Footer() {
 
           {/* Legal Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Informations légales</h3>
+            <h3 className="text-white font-semibold mb-4">{t.footer.legal}</h3>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="/confidentialite"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  Politique de confidentialité
+                <Link href={`${prefix}/confidentialite`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.privacy}
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/conditions"
-                  className="text-white/60 hover:text-white text-sm transition-colors"
-                >
-                  Conditions d'utilisation
+                <Link href={`${prefix}/conditions`} className="text-white/60 hover:text-white text-sm transition-colors">
+                  {t.footer.links.terms}
                 </Link>
               </li>
             </ul>
@@ -90,10 +76,10 @@ export function Footer() {
         {/* Copyright */}
         <div className="pt-6 border-t border-white/10 text-center">
           <p className="text-white/50 text-sm">
-            © {currentYear} AuroWeather. Tous droits réservés.
+            © {currentYear} AuroWeather. {t.footer.copyright}
           </p>
           <p className="text-white/40 text-xs mt-2">
-            Données météo fournies par OpenWeatherMap
+            {t.footer.dataSource}
           </p>
         </div>
       </div>

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, X, Settings, Check } from 'lucide-react';
 import Link from 'next/link';
+import { getTranslation } from '@/i18n/getTranslation';
+import type { Locale } from '@/i18n/index';
 
 type CookiePreferences = {
   necessary: boolean;
@@ -11,7 +13,14 @@ type CookiePreferences = {
   advertising: boolean;
 };
 
-export function CookieConsent() {
+interface CookieConsentProps {
+  locale?: Locale;
+}
+
+export function CookieConsent({ locale = 'fr' }: CookieConsentProps) {
+  const t = getTranslation(locale).cookie;
+  const prefix = locale === 'en' ? '/en' : '';
+
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -43,31 +52,20 @@ export function CookieConsent() {
     setShowBanner(false);
     setShowSettings(false);
 
-    // Here you would typically initialize or disable analytics/advertising scripts
     if (prefs.analytics) {
-      // Initialize analytics (e.g., Google Analytics)
       console.log('Analytics enabled');
     }
     if (prefs.advertising) {
-      // AdSense is already loaded, but you could add additional tracking here
       console.log('Advertising cookies enabled');
     }
   };
 
   const acceptAll = () => {
-    savePreferences({
-      necessary: true,
-      analytics: true,
-      advertising: true,
-    });
+    savePreferences({ necessary: true, analytics: true, advertising: true });
   };
 
   const rejectAll = () => {
-    savePreferences({
-      necessary: true,
-      analytics: false,
-      advertising: false,
-    });
+    savePreferences({ necessary: true, analytics: false, advertising: false });
   };
 
   const saveCustom = () => {
@@ -104,7 +102,7 @@ export function CookieConsent() {
                         <Cookie className="w-6 h-6 text-blue-400" />
                       </div>
                       <h3 className="text-xl font-semibold text-white">
-                        Gestion des cookies
+                        {t.title}
                       </h3>
                     </div>
                   </div>
@@ -112,18 +110,15 @@ export function CookieConsent() {
                   {/* Content */}
                   <div className="mb-6">
                     <p className="text-white/80 leading-relaxed mb-4">
-                      Nous utilisons des cookies pour améliorer votre expérience, analyser notre trafic
-                      et afficher des publicités personnalisées. Vous pouvez choisir quels cookies vous
-                      acceptez.
+                      {t.description}
                     </p>
                     <p className="text-white/60 text-sm">
-                      En cliquant sur "Tout accepter", vous consentez à l'utilisation de tous les cookies.
-                      Pour en savoir plus, consultez notre{' '}
+                      {t.learnMore}{' '}
                       <Link
-                        href="/confidentialite"
+                        href={`${prefix}/confidentialite`}
                         className="text-blue-400 hover:text-blue-300 underline"
                       >
-                        Politique de confidentialité
+                        {t.privacyPolicy}
                       </Link>.
                     </p>
                   </div>
@@ -135,21 +130,21 @@ export function CookieConsent() {
                       className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium flex items-center justify-center gap-2"
                     >
                       <Check className="w-5 h-5" />
-                      Tout accepter
+                      {t.acceptAll}
                     </button>
                     <button
                       onClick={rejectAll}
                       className="flex-1 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors font-medium flex items-center justify-center gap-2 border border-white/20"
                     >
                       <X className="w-5 h-5" />
-                      Tout refuser
+                      {t.rejectAll}
                     </button>
                     <button
                       onClick={() => setShowSettings(true)}
                       className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-colors font-medium flex items-center justify-center gap-2 border border-white/10"
                     >
                       <Settings className="w-5 h-5" />
-                      Personnaliser
+                      {t.customize}
                     </button>
                   </div>
                 </div>
@@ -172,7 +167,7 @@ export function CookieConsent() {
                         <Settings className="w-6 h-6 text-blue-400" />
                       </div>
                       <h3 className="text-2xl font-semibold text-white">
-                        Paramètres des cookies
+                        {t.settingsTitle}
                       </h3>
                     </div>
                     <button
@@ -189,35 +184,27 @@ export function CookieConsent() {
                     <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
-                          <h4 className="text-white font-semibold mb-1">
-                            Cookies nécessaires
-                          </h4>
+                          <h4 className="text-white font-semibold mb-1">{t.necessary}</h4>
                           <p className="text-white/60 text-sm leading-relaxed">
-                            Ces cookies sont essentiels au fonctionnement du site. Ils ne peuvent
-                            pas être désactivés.
+                            {t.necessaryDesc}
                           </p>
                         </div>
                         <div className="ml-4 flex items-center">
                           <div className="px-3 py-1 bg-green-500/20 text-green-400 text-sm rounded-full border border-green-500/30">
-                            Toujours actifs
+                            {t.necessaryAlways}
                           </div>
                         </div>
                       </div>
-                      <p className="text-white/40 text-xs mt-2">
-                        Exemples : préférences de langue, session utilisateur
-                      </p>
+                      <p className="text-white/40 text-xs mt-2">{t.necessaryExamples}</p>
                     </div>
 
                     {/* Analytics Cookies */}
                     <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
-                          <h4 className="text-white font-semibold mb-1">
-                            Cookies d'analyse
-                          </h4>
+                          <h4 className="text-white font-semibold mb-1">{t.analytics}</h4>
                           <p className="text-white/60 text-sm leading-relaxed">
-                            Ces cookies nous aident à comprendre comment les visiteurs utilisent
-                            notre site afin de l'améliorer.
+                            {t.analyticsDesc}
                           </p>
                         </div>
                         <div className="ml-4">
@@ -236,21 +223,16 @@ export function CookieConsent() {
                           </button>
                         </div>
                       </div>
-                      <p className="text-white/40 text-xs mt-2">
-                        Exemples : Google Analytics, statistiques de visite
-                      </p>
+                      <p className="text-white/40 text-xs mt-2">{t.analyticsExamples}</p>
                     </div>
 
                     {/* Advertising Cookies */}
                     <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
-                          <h4 className="text-white font-semibold mb-1">
-                            Cookies publicitaires
-                          </h4>
+                          <h4 className="text-white font-semibold mb-1">{t.advertising}</h4>
                           <p className="text-white/60 text-sm leading-relaxed">
-                            Ces cookies permettent d'afficher des publicités adaptées à vos centres
-                            d'intérêt via Google AdSense.
+                            {t.advertisingDesc}
                           </p>
                         </div>
                         <div className="ml-4">
@@ -269,22 +251,19 @@ export function CookieConsent() {
                           </button>
                         </div>
                       </div>
-                      <p className="text-white/40 text-xs mt-2">
-                        Exemples : Google AdSense, publicités personnalisées
-                      </p>
+                      <p className="text-white/40 text-xs mt-2">{t.advertisingExamples}</p>
                     </div>
                   </div>
 
                   {/* Info */}
                   <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-6">
                     <p className="text-blue-200 text-sm leading-relaxed">
-                      Vous pouvez modifier vos préférences à tout moment. Pour plus d'informations,
-                      consultez notre{' '}
+                      {t.modifyInfo}{' '}
                       <Link
-                        href="/confidentialite"
+                        href={`${prefix}/confidentialite`}
                         className="underline hover:text-blue-300"
                       >
-                        Politique de confidentialité
+                        {t.privacyPolicy}
                       </Link>.
                     </p>
                   </div>
@@ -296,13 +275,13 @@ export function CookieConsent() {
                       className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium flex items-center justify-center gap-2"
                     >
                       <Check className="w-5 h-5" />
-                      Enregistrer mes choix
+                      {t.saveChoices}
                     </button>
                     <button
                       onClick={acceptAll}
                       className="flex-1 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors font-medium border border-white/20"
                     >
-                      Tout accepter
+                      {t.acceptAll}
                     </button>
                   </div>
                 </div>

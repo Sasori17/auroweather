@@ -77,11 +77,14 @@ export const weatherTranslations: Record<string, string> = {
 };
 
 /**
- * Traduit une description météo de l'anglais vers le français
- * @param description - Description en anglais de l'API
- * @returns Description traduite en français
+ * Traduit une description météo selon la locale.
+ * Pour locale 'fr' : traduit de l'anglais vers le français.
+ * Pour locale 'en' : retourne la description telle quelle (déjà en anglais via API lang=en).
  */
-export function translateWeatherDescription(description: string): string {
+export function translateWeatherDescription(description: string, locale: string = 'fr'): string {
+  if (locale !== 'fr') {
+    return description;
+  }
   const lowerDescription = description.toLowerCase();
   return weatherTranslations[lowerDescription] || description;
 }
