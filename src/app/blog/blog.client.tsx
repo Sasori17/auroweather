@@ -2,23 +2,28 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Clock, Calendar, User } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Calendar } from 'lucide-react';
 import { blogArticles } from '@/data/blogArticles';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export default function BlogClientPage() {
-  // Grouper les articles par catégorie
+  const { t, locale } = useTranslation();
+  const p = t.pages.blog;
+  const lp = (path: string) => locale === 'en' ? `/en${path}` : path;
+
   const categories = Array.from(new Set(blogArticles.map(article => article.category)));
+  const dateLocale = locale === 'en' ? 'en-GB' : 'fr-FR';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Back Button */}
         <Link
-          href="/"
+          href={lp('/')}
           className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour à l'accueil
+          {t.pages.common.backHome}
         </Link>
 
         {/* Header */}
@@ -30,11 +35,11 @@ export default function BlogClientPage() {
           <div className="flex items-center gap-3 mb-4">
             <BookOpen className="w-8 h-8 text-blue-400" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Blog Météo
+              {p.title}
             </h1>
           </div>
           <p className="text-xl text-white/70">
-            Guides complets, analyses approfondies et conseils pratiques pour mieux comprendre la météo et ses impacts sur votre quotidien
+            {p.subtitle}
           </p>
         </motion.div>
 
@@ -65,7 +70,7 @@ export default function BlogClientPage() {
               transition={{ delay: index * 0.1 }}
             >
               <Link
-                href={`/blog/${article.slug}`}
+                href={lp(`/blog/${article.slug}`)}
                 className="block group h-full"
               >
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all h-full flex flex-col hover:border-white/40">
@@ -94,13 +99,13 @@ export default function BlogClientPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      <span>{new Date(article.publishedDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                      <span>{new Date(article.publishedDate).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                     </div>
                   </div>
 
                   {/* Read More */}
                   <div className="mt-4 text-blue-400 text-sm font-medium group-hover:underline">
-                    Lire l'article →
+                    {p.readArticle}
                   </div>
                 </div>
               </Link>
@@ -115,35 +120,23 @@ export default function BlogClientPage() {
           transition={{ delay: 0.5 }}
           className="mt-16 bg-blue-500/10 backdrop-blur-md rounded-2xl p-8 border border-blue-500/20"
         >
-          <h2 className="text-2xl font-semibold text-white mb-4">Pourquoi consulter notre blog météo ?</h2>
+          <h2 className="text-2xl font-semibold text-white mb-4">{p.why.title}</h2>
           <div className="grid md:grid-cols-2 gap-6 text-white/80">
             <div>
-              <h3 className="font-semibold text-white mb-2">Contenu Expert et Approfondi</h3>
-              <p className="text-sm leading-relaxed">
-                Nos articles sont rédigés par des passionnés de météorologie, combinant connaissances scientifiques
-                et applications pratiques pour votre quotidien.
-              </p>
+              <h3 className="font-semibold text-white mb-2">{p.why.expert.title}</h3>
+              <p className="text-sm leading-relaxed">{p.why.expert.desc}</p>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Guides Pratiques et Actionnables</h3>
-              <p className="text-sm leading-relaxed">
-                Chaque article vous donne des conseils concrets que vous pouvez appliquer immédiatement,
-                que ce soit pour votre sécurité, votre santé ou vos activités.
-              </p>
+              <h3 className="font-semibold text-white mb-2">{p.why.practical.title}</h3>
+              <p className="text-sm leading-relaxed">{p.why.practical.desc}</p>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Mise à Jour Régulière</h3>
-              <p className="text-sm leading-relaxed">
-                Nous enrichissons constamment notre blog avec de nouveaux articles couvrant tous les aspects
-                de la météorologie et ses impacts sur la vie quotidienne.
-              </p>
+              <h3 className="font-semibold text-white mb-2">{p.why.updated.title}</h3>
+              <p className="text-sm leading-relaxed">{p.why.updated.desc}</p>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Pour Tous les Publics</h3>
-              <p className="text-sm leading-relaxed">
-                Du débutant curieux au professionnel (agriculteur, sportif), nos articles sont accessibles
-                et riches en informations utiles pour tous.
-              </p>
+              <h3 className="font-semibold text-white mb-2">{p.why.audience.title}</h3>
+              <p className="text-sm leading-relaxed">{p.why.audience.desc}</p>
             </div>
           </div>
         </motion.div>
@@ -156,10 +149,10 @@ export default function BlogClientPage() {
           className="mt-12 text-center"
         >
           <Link
-            href="/"
+            href={lp('/')}
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transition-colors"
           >
-            Consulter la météo en direct
+            {p.cta}
           </Link>
         </motion.div>
       </div>

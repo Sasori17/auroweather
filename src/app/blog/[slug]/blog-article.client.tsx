@@ -5,13 +5,18 @@ import Link from 'next/link';
 import { ArrowLeft, Clock, Calendar, User, Tag } from 'lucide-react';
 import { blogArticles, type BlogArticle } from '@/data/blogArticles';
 import ReactMarkdown from 'react-markdown';
+import { useTranslation } from '@/i18n/useTranslation';
 
 interface BlogArticleClientPageProps {
   article: BlogArticle;
 }
 
 export default function BlogArticleClientPage({ article }: BlogArticleClientPageProps) {
-  // Find related articles (same category, different slug)
+  const { t, locale } = useTranslation();
+  const p = t.pages.blogArticle;
+  const lp = (path: string) => locale === 'en' ? `/en${path}` : path;
+  const dateLocale = locale === 'en' ? 'en-GB' : 'fr-FR';
+
   const relatedArticles = blogArticles
     .filter((a) => a.category === article.category && a.slug !== article.slug)
     .slice(0, 3);
@@ -21,11 +26,11 @@ export default function BlogArticleClientPage({ article }: BlogArticleClientPage
       <article className="max-w-4xl mx-auto px-6 py-12">
         {/* Back Button */}
         <Link
-          href="/blog"
+          href={lp('/blog')}
           className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour au blog
+          {p.backToBlog}
         </Link>
 
         {/* Article Header */}
@@ -60,11 +65,11 @@ export default function BlogArticleClientPage({ article }: BlogArticleClientPage
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              <span>{new Date(article.publishedDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              <span>{new Date(article.publishedDate).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
-              <span>{article.readTime} de lecture</span>
+              <span>{article.readTime} {p.readTime}</span>
             </div>
           </div>
         </motion.header>
@@ -127,16 +132,16 @@ export default function BlogArticleClientPage({ article }: BlogArticleClientPage
           className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-md rounded-2xl p-8 border border-blue-500/20 mb-12"
         >
           <h3 className="text-2xl font-semibold text-white mb-3">
-            Consultez la météo en temps réel
+            {p.cta.title}
           </h3>
           <p className="text-white/70 mb-4">
-            Maintenant que vous comprenez mieux les phénomènes météorologiques, utilisez AuroWeather pour suivre les conditions en direct et anticiper les changements.
+            {p.cta.desc}
           </p>
           <Link
-            href="/"
+            href={lp('/')}
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition-colors"
           >
-            Voir la météo →
+            {p.cta.button}
           </Link>
         </motion.div>
 
@@ -148,12 +153,12 @@ export default function BlogArticleClientPage({ article }: BlogArticleClientPage
             transition={{ delay: 0.4 }}
             className="mt-12"
           >
-            <h2 className="text-2xl font-bold text-white mb-6">Articles similaires</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">{p.related}</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {relatedArticles.map((relatedArticle) => (
                 <Link
                   key={relatedArticle.slug}
-                  href={`/blog/${relatedArticle.slug}`}
+                  href={lp(`/blog/${relatedArticle.slug}`)}
                   className="group"
                 >
                   <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all hover:border-white/40 h-full">
@@ -164,7 +169,7 @@ export default function BlogArticleClientPage({ article }: BlogArticleClientPage
                       {relatedArticle.description}
                     </p>
                     <div className="text-blue-400 text-sm font-medium group-hover:underline">
-                      Lire →
+                      {p.read}
                     </div>
                   </div>
                 </Link>
@@ -181,11 +186,11 @@ export default function BlogArticleClientPage({ article }: BlogArticleClientPage
           className="mt-12 text-center"
         >
           <Link
-            href="/blog"
+            href={lp('/blog')}
             className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à tous les articles
+            {p.backToAll}
           </Link>
         </motion.div>
       </article>
